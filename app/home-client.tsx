@@ -70,12 +70,12 @@ const FOUNDERS = [
   {
     id: 'abdan', img: '/asset/abdan.jpg', name: 'Abdan', role: 'Co-founder · Product, Strategy & Design',
     bio: 'Leads product strategy, website design, and every conversation with prospective clients. Owns the gap analysis and the prototype you saw before working with us.',
-    cred: '5+ yrs building digital products with top-tier brands'
+    creds: ['Fast multidisciplinary context absorption', '5+ years building digital solution']
   },
   {
     id: 'bedur', img: '/asset/bedur.jpg', name: 'Bedur', role: 'Co-founder · Development & Tech Operations',
     bio: 'Leads development, system integration, and technical operations. Makes sure every site we ship is fast, secure, and keeps running well long after launch.',
-    cred: '100+ websites built in the last 4 years'
+    creds: ['100+ websites built in the last 4 years']
   }
 ];
 
@@ -612,7 +612,9 @@ export default function HomeClient() {
                     <div className="f-name">{f.name}</div>
                     <div className="f-role">{f.role}</div>
                     <p className="f-bio">{f.bio}</p>
-                    <div className="f-cred">{f.cred}</div>
+                    <div className="f-creds">
+                      {f.creds.map((c) => <div className="f-cred" key={c}>{c}</div>)}
+                    </div>
                   </div>
                 </a>
               ))}
