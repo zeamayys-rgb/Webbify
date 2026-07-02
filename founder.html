@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Meet the founders of Webbify — Abdan (Product, Strategy & Design) and Bedur (Development & Tech Operations).">
+<title>Founders — Webbify</title>
+
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64"><polygon points="2,2 58,2 30,60" fill="%238CE7E5"/><polygon points="42,2 98,2 70,60" fill="%23F2D8A5" opacity="0.92"/><polygon points="40,2 60,2 50,23" fill="%235863E7"/></svg>'>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@400;600&family=Montserrat:ital,wght@1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   WEBBIFY FOUNDERS — same design tokens as webbify-index.html
+   ============================================================ */
+:root{
+  --indigo:#5863E7; --indigo-light:#7982EC; --indigo-100:#BBBEF3;
+  --turq:#8CE7E5;   --turq-100:#D5F7F6;    --turq-50:#E9F9F8;
+  --sand:#F2D8A5;   --sand-100:#F7E8C9;    --sand-50:#FAF1E2;
+  --bg:#F7F7F7; --surface:#FFFFFF; --muted:#666666;
+  --ink:#1E2130;
+  --wa:#25D366;
+  --font-display:'Poppins',sans-serif;
+  --font-body:'Open Sans',sans-serif;
+  --font-tag:'Montserrat',sans-serif;
+  --radius:18px; --radius-pill:100px;
+  --shadow-sm:0 2px 14px rgba(30,33,48,.06);
+  --shadow-md:0 12px 40px rgba(30,33,48,.10);
+  --shadow-lg:0 28px 70px rgba(30,33,48,.14);
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{font-family:var(--font-body);background:var(--bg);color:var(--muted);
+  font-size:16px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);line-height:1.12;font-weight:800}
+a{text-decoration:none;color:inherit}
+img,svg,canvas{display:block;max-width:100%}
+::selection{background:var(--indigo);color:#fff}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 5%}
+section{padding:100px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-weight:600;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:18px}
+.eyebrow::before{content:'';width:9px;height:9px;background:var(--indigo);clip-path:polygon(0 0,100% 0,50% 100%)}
+.h-lg{font-size:clamp(28px,3.6vw,44px);letter-spacing:-.02em;margin-bottom:16px}
+.sub{font-size:17px;max-width:560px}
+.accent{color:var(--indigo)}
+.btn{display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-weight:700;font-size:15px;
+  padding:15px 30px;border-radius:var(--radius-pill);cursor:pointer;border:none;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease)}
+.btn-primary{background:var(--indigo);color:#fff;box-shadow:0 8px 26px rgba(88,99,231,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(88,99,231,.45);background:#4a55e0}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(30,33,48,.18)}
+.btn-ghost:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-2px)}
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 8px 26px rgba(37,211,102,.35)}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(37,211,102,.45);background:#1fc65b}
+.btn .arr{transition:transform .25s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* split-text scaffolding (same as index) */
+[data-split] .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+[data-split] .wi{display:inline-block;transform:translateY(112%);will-change:transform}
+.rv{opacity:0;transform:translateY(28px);will-change:transform,opacity}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  transition:background .3s var(--ease),box-shadow .3s var(--ease)}
+nav.scrolled{background:rgba(247,247,247,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(30,33,48,.06)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 5%;height:76px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{width:34px}
+.brand-name{font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink)}
+.brand-name i{font-style:normal;color:var(--indigo)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.back-link{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink);
+  display:inline-flex;align-items:center;gap:7px;transition:color .2s}
+.back-link:hover{color:var(--indigo)}
+.nav-cta{padding:11px 22px;font-size:13.5px}
+
+/* ============================================================
+   HERO — Three.js prism field behind, founder intro in front
+   ============================================================ */
+#hero{position:relative;min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:150px 0 70px;overflow:hidden}
+#threeWrap{position:absolute;inset:0;pointer-events:none}
+#threeWrap canvas{width:100%!important;height:100%!important}
+.hero-blob{position:absolute;border-radius:50%;pointer-events:none}
+.blob-a{width:600px;height:600px;top:-180px;right:-160px;background:radial-gradient(circle,rgba(140,231,229,.28),transparent 65%)}
+.blob-b{width:520px;height:520px;bottom:-220px;left:-140px;background:radial-gradient(circle,rgba(242,216,165,.32),transparent 65%)}
+
+/* ---------- founder tabs ---------- */
+.tabs{position:relative;z-index:3;display:flex;gap:10px;margin-bottom:52px;flex-wrap:wrap}
+.tab{display:flex;align-items:center;gap:12px;cursor:pointer;border:1.5px solid rgba(30,33,48,.12);
+  background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:var(--radius-pill);
+  padding:9px 22px 9px 10px;font-family:var(--font-display);
+  transition:border-color .3s var(--ease),background .3s var(--ease),transform .3s var(--ease)}
+.tab img{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center top}
+.tab .t-name{font-weight:700;font-size:14.5px;color:var(--ink);line-height:1.2}
+.tab .t-role{font-weight:600;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tab:hover{transform:translateY(-2px);border-color:rgba(88,99,231,.4)}
+.tab.active{border-color:var(--indigo);background:#fff;box-shadow:0 8px 26px rgba(88,99,231,.18)}
+.tab.active .t-role{color:var(--indigo)}
+
+/* ---------- hero grid ---------- */
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.photo-scene{perspective:900px;display:flex;justify-content:center}
+.photo-card{position:relative;width:min(360px,88%);border-radius:26px;overflow:hidden;
+  box-shadow:var(--shadow-lg);transform-style:preserve-3d;will-change:transform}
+.photo-card img{width:100%;aspect-ratio:1/1.08;object-fit:cover;object-position:center top}
+.photo-card::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(30,33,48,.28),transparent 45%)}
+.photo-chip{position:absolute;z-index:3;font-family:var(--font-display);font-weight:700;font-size:12px;
+  background:#fff;border:1px solid rgba(30,33,48,.08);border-radius:var(--radius-pill);
+  padding:9px 16px;box-shadow:var(--shadow-sm);color:var(--ink);white-space:nowrap;will-change:transform}
+.chip-1{top:8%;left:-4%;animation:floatY 4.6s ease-in-out infinite}
+.chip-2{bottom:12%;right:-5%;animation:floatY 5.2s ease-in-out .8s infinite}
+.photo-chip i{font-style:normal;margin-right:6px}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+
+.hero-copy .role-line{display:inline-flex;align-items:center;gap:9px;
+  background:rgba(88,99,231,.09);border:1px solid rgba(88,99,231,.22);color:var(--indigo);
+  font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  padding:8px 18px;border-radius:var(--radius-pill);margin-bottom:24px}
+.hero-copy .role-line::before{content:'';width:8px;height:8px;background:var(--indigo);clip-path:polygon(0 0,100% 0,50% 100%)}
+.hero-copy h1{font-size:clamp(34px,4.8vw,60px);letter-spacing:-.025em;margin-bottom:20px}
+.hero-copy .bio{font-size:17px;max-width:540px;margin-bottom:30px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+.hero-stats{display:flex;gap:30px;flex-wrap:wrap}
+.stat .n{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--ink);line-height:1}
+.stat .n b{color:var(--indigo)}
+.stat .l{font-size:12.5px;margin-top:5px;max-width:120px}
+.stat+.stat{padding-left:30px;border-left:1px solid rgba(30,33,48,.1)}
+
+/* ============================================================
+   BRAND LOGO WALL
+   ============================================================ */
+#brands{background:var(--surface);border-top:1px solid rgba(30,33,48,.06)}
+.logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:52px;align-items:stretch}
+.logo-cell{background:var(--bg);border:1px solid rgba(30,33,48,.07);border-radius:18px;
+  display:flex;align-items:center;justify-content:center;padding:26px 22px;min-height:110px;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease)}
+.logo-cell img{max-height:44px;width:auto;max-width:100%;filter:grayscale(1);opacity:.62;
+  transition:filter .4s var(--ease),opacity .4s var(--ease),transform .4s var(--ease)}
+.logo-cell:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:rgba(88,99,231,.3)}
+.logo-cell:hover img{filter:grayscale(0);opacity:1;transform:scale(1.06)}
+.brand-note{margin-top:26px;font-size:13px;color:#9aa0ad;max-width:620px}
+
+/* ============================================================
+   SELLING POINTS — skill cards
+   ============================================================ */
+#skills{background:var(--bg)}
+.skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:54px}
+.skill{position:relative;background:var(--surface);border:1px solid rgba(30,33,48,.07);border-radius:24px;
+  padding:38px 36px;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.skill:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.skill .s-n{position:absolute;top:10px;right:20px;font-family:var(--font-display);font-weight:800;
+  font-size:86px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--indigo-100);pointer-events:none}
+.skill-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);
+  font-weight:600;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  padding:6px 14px;border-radius:var(--radius-pill);margin-bottom:20px}
+.skill:nth-child(1) .skill-tag{background:var(--turq-100);color:#1a7a78}
+.skill:nth-child(2) .skill-tag{background:rgba(88,99,231,.12);color:var(--indigo)}
+.skill:nth-child(3) .skill-tag{background:var(--sand-100);color:#8a6410}
+.skill:nth-child(4) .skill-tag{background:rgba(37,211,102,.12);color:#128a43}
+.skill h3{font-size:22px;margin-bottom:12px}
+.skill p{font-size:14.5px}
+
+/* ============================================================
+   TIMELINE — line draws with scroll
+   ============================================================ */
+#journey{background:var(--surface)}
+.tl{position:relative;margin-top:60px;padding-left:42px}
+.tl-line{position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:rgba(30,33,48,.09);border-radius:2px}
+.tl-line i{display:block;width:100%;height:100%;background:linear-gradient(var(--indigo),var(--turq));
+  transform-origin:top;transform:scaleY(0)}
+.tl-item{position:relative;padding-bottom:46px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-42px;top:7px;width:22px;height:22px;
+  background:var(--bg);border:2px solid var(--indigo-100);border-radius:50%;
+  transition:border-color .3s var(--ease),background .3s var(--ease)}
+.tl-item::after{content:'';position:absolute;left:-35px;top:14px;width:8px;height:8px;
+  background:var(--indigo);clip-path:polygon(0 0,100% 0,50% 100%);opacity:0;transition:opacity .3s}
+.tl-item.lit::before{border-color:var(--indigo);background:#fff}
+.tl-item.lit::after{opacity:1}
+.tl-year{font-family:var(--font-display);font-weight:700;font-size:12.5px;letter-spacing:.1em;
+  color:var(--indigo);text-transform:uppercase}
+.tl-org{font-family:var(--font-display);font-weight:800;font-size:21px;color:var(--ink);margin:6px 0 2px}
+.tl-role{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--muted);margin-bottom:10px}
+.tl-desc{font-size:14.5px;max-width:640px}
+.tl-desc b{color:var(--indigo);font-weight:600}
+
+/* ============================================================
+   BEDUR PANEL (placeholder until his full profile lands)
+   ============================================================ */
+.soon-card{position:relative;z-index:2;background:var(--surface);border:1px solid rgba(30,33,48,.08);
+  border-radius:28px;padding:46px;max-width:660px;box-shadow:var(--shadow-md);
+  display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap}
+.soon-card img{width:132px;height:132px;border-radius:24px;object-fit:cover;object-position:center top}
+.soon-card .f-name{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--ink)}
+.soon-card .f-role{font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--indigo);margin:5px 0 14px}
+.soon-card p{font-size:15px;max-width:380px}
+.soon-badge{margin-top:16px;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-display);font-weight:700;font-size:12.5px;color:#8a6410;
+  background:var(--sand-100);padding:7px 15px;border-radius:var(--radius-pill)}
+
+/* ---------- CTA + footer ---------- */
+#cta{text-align:center;padding:120px 0}
+#cta .sub{margin:0 auto 38px}
+footer{border-top:1px solid rgba(30,33,48,.08);padding:30px 0;background:var(--bg)}
+.foot-row{display:flex;justify-content:space-between;font-size:12.5px;color:#9aa0ad;flex-wrap:wrap;gap:8px}
+.foot-row a{color:var(--indigo)}
+
+/* ---------- panels ---------- */
+.panel{display:none}
+.panel.active{display:block}
+
+/* ============================================================
+   RESPONSIVE + REDUCED MOTION
+   ============================================================ */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .photo-scene{order:-1}
+  .photo-card{width:min(300px,70%)}
+  .skill-grid{grid-template-columns:1fr}
+  .logo-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:640px){
+  section{padding:76px 0}
+  #hero{padding:130px 0 56px}
+  .logo-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-stats{gap:18px}
+  .stat+.stat{padding-left:18px}
+  .photo-chip{display:none}
+  .soon-card{padding:32px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+  [data-split] .wi{transform:none}
+  #threeWrap{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="webbify-index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 100 64" aria-hidden="true">
+        <polygon points="2,2 58,2 30,60" fill="#8CE7E5"/>
+        <polygon points="42,2 98,2 70,60" fill="#F2D8A5" opacity="0.92"/>
+        <polygon points="40,2 60,2 50,23" fill="#5863E7"/>
+      </svg>
+      <span class="brand-name">Webbi<i>fy</i></span>
+    </a>
+    <div class="nav-right">
+      <a class="back-link" href="webbify-index.html#founders">← Back to home</a>
+      <!-- TODO: replace 62XXXXXXXXXXX with the real Webbify WhatsApp number -->
+      <a class="btn btn-primary nav-cta" href="https://wa.me/62XXXXXXXXXXX?text=Hi%20Webbify%20%E2%80%94%20I%27d%20like%20to%20talk%20about%20a%20website." target="_blank" rel="noopener">Chat on WhatsApp</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════ HERO + TABS ══════════════ -->
+<section id="hero">
+  <div class="hero-blob blob-a"></div>
+  <div class="hero-blob blob-b"></div>
+  <div id="threeWrap" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <!-- founder switcher -->
+    <div class="tabs rv" role="tablist" aria-label="Choose a founder">
+      <button class="tab active" data-founder="abdan" role="tab" aria-selected="true">
+        <img src="asset/abdan.jpg" alt="">
+        <span><span class="t-name">Abdan</span><br><span class="t-role">Product · Strategy · Design</span></span>
+      </button>
+      <button class="tab" data-founder="bedur" role="tab" aria-selected="false">
+        <img src="asset/bedur.jpg" alt="">
+        <span><span class="t-name">Bedur</span><br><span class="t-role">Development · Tech Ops</span></span>
+      </button>
+    </div>
+
+    <!-- ════════ ABDAN ════════ -->
+    <div class="panel active" id="panel-abdan">
+      <div class="hero-grid">
+        <div class="photo-scene">
+          <div class="photo-card" id="tiltCard">
+            <img src="asset/abdan.jpg" alt="Abdan Syakuro — Co-founder of Webbify">
+          </div>
+          <div class="photo-chip chip-1"><i>🎓</i>Google UX Design certified</div>
+          <div class="photo-chip chip-2"><i>🧠</i>Computer Science, IPB University</div>
+        </div>
+        <div class="hero-copy">
+          <div class="role-line rv">Co-founder · Product, Strategy &amp; Design</div>
+          <h1 data-split>I turn business problems into <span class="accent">products people love.</span></h1>
+          <p class="bio rv">I'm Abdan — a product designer with 5+ years across climate, energy, telco, mining, and education. I work the whole arc: research to strategy to interface to a working website. At Webbify, I own the gap analysis, the design, and every conversation with you.</p>
+          <div class="hero-ctas rv">
+            <a class="btn btn-wa" href="https://wa.me/62XXXXXXXXXXX?text=Hi%20Abdan%2C%20let%27s%20talk%20about%20my%20website." target="_blank" rel="noopener">Talk to me directly <span class="arr">→</span></a>
+            <a class="btn btn-ghost" href="webbify-index.html#how">How we work</a>
+          </div>
+          <div class="hero-stats rv">
+            <div class="stat"><div class="n"><b data-count="5">0</b>+ yrs</div><div class="l">designing digital products</div></div>
+            <div class="stat"><div class="n"><b data-count="16">0</b> apps</div><div class="l">standardized for Pertamina</div></div>
+            <div class="stat"><div class="n"><b data-count="1000">0</b>+</div><div class="l">pages redesigned into one system</div></div>
+            <div class="stat"><div class="n"><b data-count="8">0</b> NGOs</div><div class="l">researched across Southeast Asia</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ BEDUR (placeholder — full profile coming soon) ════════ -->
+    <div class="panel" id="panel-bedur">
+      <div class="soon-card">
+        <img src="asset/bedur.jpg" alt="Bedur — Co-founder of Webbify">
+        <div>
+          <div class="f-name">Bedur</div>
+          <div class="f-role">Co-founder · Development &amp; Tech Operations</div>
+          <p>Leads development, system integration, and technical operations. Makes sure every site Webbify ships is fast, secure, and keeps running well long after launch — <b style="color:var(--ink)">100+ websites built in the last 4 years</b>.</p>
+          <div class="soon-badge">▲&nbsp; Full profile — coming soon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- everything below belongs to the Abdan story; hidden when Bedur tab is active -->
+<div id="abdanSections">
+
+<!-- ══════════════ BRAND LOGO WALL ══════════════ -->
+<section id="brands">
+  <div class="wrap">
+    <div class="eyebrow rv">Track record</div>
+    <h2 class="h-lg" data-split>Work trusted by <span class="accent">top-tier brands.</span></h2>
+    <p class="sub rv">Digital products designed for and alongside these organizations — from global consultancies to Indonesia's biggest enterprises.</p>
+    <div class="logo-grid">
+      <div class="logo-cell rv"><img src="asset/logos/google.png"    alt="Google" loading="lazy"></div>
+      <div class="logo-cell rv"><img src="asset/logos/bcg.png"       alt="Boston Consulting Group" loading="lazy"></div>
+      <div class="logo-cell rv"><img src="asset/logos/wri.png"       alt="World Resources Institute" loading="lazy"></div>
+      <div class="logo-cell rv"><img src="asset/logos/pertamina.png" alt="Pertamina" loading="lazy"></div>
+      <div class="logo-cell rv"><img src="asset/logos/telkom.png"    alt="Telkom Indonesia" loading="lazy"></div>
+      <div class="logo-cell rv"><img src="asset/logos/sinarmas.png"  alt="Sinar Mas" loading="lazy"></div>
+    </div>
+    <p class="brand-note rv">Logos represent organizations Abdan has designed for, with, or alongside across employment, consultancy, and project engagements. All trademarks belong to their respective owners.</p>
+  </div>
+</section>
+
+<!-- ══════════════ SELLING POINTS ══════════════ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow rv">What I bring</div>
+    <h2 class="h-lg" data-split>Four things I do <span class="accent">unreasonably well.</span></h2>
+    <div class="skill-grid">
+      <div class="skill rv">
+        <div class="s-n">01</div>
+        <div class="skill-tag">Research</div>
+        <h3>Research that de-risks decisions.</h3>
+        <p>Usability tests, diary studies, interviews, surveys — I've run them all, leading design research for eight top-tier NGOs across Southeast Asia. Every design call is grounded in evidence, not taste.</p>
+      </div>
+      <div class="skill rv">
+        <div class="s-n">02</div>
+        <div class="skill-tag">Strategy</div>
+        <h3>Strategy before pixels.</h3>
+        <p>Information architecture, user journeys, and product roadmaps tied to real objectives. It's the same diagnostic thinking behind the free gap analysis every Webbify client gets first.</p>
+      </div>
+      <div class="skill rv">
+        <div class="s-n">03</div>
+        <div class="skill-tag">Systems</div>
+        <h3>Design systems at enterprise scale.</h3>
+        <p>For Pertamina, I redesigned and standardized 16 production-monitoring web apps — 230+ modules and 1,000+ pages — into one coherent system users could finally navigate.</p>
+      </div>
+      <div class="skill rv">
+        <div class="s-n">04</div>
+        <div class="skill-tag">Shipping</div>
+        <h3>Design that ships itself.</h3>
+        <p>I take designs from Figma to working web with no-code and AI-accelerated tooling. This is the engine behind Webbify's promise: a real prototype in your hands before any payment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ JOURNEY TIMELINE ══════════════ -->
+<section id="journey">
+  <div class="wrap">
+    <div class="eyebrow rv">The journey</div>
+    <h2 class="h-lg" data-split>Five industries. <span class="accent">One craft.</span></h2>
+    <div class="tl">
+      <div class="tl-line"><i id="tlFill"></i></div>
+      <div class="tl-item">
+        <div class="tl-year">2025 — Now</div>
+        <div class="tl-org">Webbify</div>
+        <div class="tl-role">Co-founder · Product, Strategy &amp; Design</div>
+        <p class="tl-desc">Building the prototype-first web agency. I own the <b>gap analysis</b>, the design, and every client conversation — you talk to the person actually making your site.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2023 — 2026</div>
+        <div class="tl-org">World Resources Institute Indonesia</div>
+        <div class="tl-role">Product Design &amp; User Research Lead</div>
+        <p class="tl-desc">Led design and research for the <b>Nature-based Solutions platform</b> serving eight top-tier NGOs across Southeast Asia — plus climate tools spanning methane tracking, agricarbon, and forest dashboards.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024 — 2025</div>
+        <div class="tl-org">Pertamina Hulu Sanga-Sanga</div>
+        <div class="tl-role">UI/UX Designer</div>
+        <p class="tl-desc">Redesigned and standardized <b>16 enterprise web applications</b> — 230+ modules, 1,000+ pages — resolving user pain points across an entire production-monitoring suite.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2023 — 2024</div>
+        <div class="tl-org">Sinar Mas Group · Borneo Indobara</div>
+        <div class="tl-role">UX Designer</div>
+        <p class="tl-desc">Designed a <b>hauling management system</b> end-to-end for two roles across mobile, desktop, and on-board units — then branded and shipped an Alert Center from logo to interface.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021 — 2022</div>
+        <div class="tl-org">Darul Quran Mulia</div>
+        <div class="tl-role">Product &amp; Visual Designer</div>
+        <p class="tl-desc">Built the <b>information architecture</b> and prototypes for the foundation's internal school platforms, structuring content the way staff actually think.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2020 — 2021</div>
+        <div class="tl-org">Telkom Indonesia</div>
+        <div class="tl-role">UI/UX Designer</div>
+        <p class="tl-desc">Led the full UI process for an <b>AI smart-speaker controller app</b> — from concept with the research team to developer hand-off documentation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /abdanSections -->
+
+<!-- ══════════════ CTA ══════════════ -->
+<section id="cta">
+  <div class="wrap">
+    <h2 class="h-lg" data-split>Your website deserves <span class="accent">a founder's attention.</span></h2>
+    <p class="sub rv">No account managers, no hand-offs. You work directly with the people who design and build.</p>
+    <div class="rv">
+      <a class="btn btn-primary" href="https://wa.me/62XXXXXXXXXXX?text=Hi%20Webbify%20%E2%80%94%20I%27d%20like%20to%20talk%20about%20a%20website." target="_blank" rel="noopener">Start with a free prototype <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div>© 2026 Webbify. All rights reserved.</div>
+    <div><a href="webbify-index.html">webbify.id</a> · Jakarta, Indonesia</div>
+  </div>
+</footer>
+
+<!-- ══════════════ MOTION (GSAP + ScrollTrigger + Lenis + Three.js via CDN) ══════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var MOBILE  = window.matchMedia('(max-width: 767px)').matches;
+var hasGSAP = typeof gsap !== 'undefined';
+if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Lenis smooth scroll ---------- */
+var lenis = null;
+if (!REDUCED && typeof Lenis !== 'undefined' && hasGSAP) {
+  lenis = new Lenis({ lerp: 0.1 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* ---------- nav glass ---------- */
+var nav = document.getElementById('nav');
+window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+
+/* ---------- word splitter (same as index) ---------- */
+function splitWords(el){
+  var words = el.innerHTML.trim().split(/(<br\s*\/?>)/i);
+  el.innerHTML = '';
+  words.forEach(function(chunk){
+    if (/^<br/i.test(chunk)) { el.insertAdjacentHTML('beforeend', '<br>'); return; }
+    var tmp = document.createElement('div'); tmp.innerHTML = chunk;
+    Array.prototype.slice.call(tmp.childNodes).forEach(function(node){
+      var text, open = '', close = '';
+      if (node.nodeType === 3) { text = node.textContent; }
+      else {
+        text = node.textContent;
+        var cls = node.className ? ' class="' + node.className + '"' : '';
+        open = '<' + node.tagName.toLowerCase() + cls + '>';
+        close = '</' + node.tagName.toLowerCase() + '>';
+      }
+      var html = text.split(' ').filter(Boolean).map(function(w){
+        return '<span class="w"><span class="wi">' + w + '</span></span>';
+      }).join(' ');
+      el.insertAdjacentHTML('beforeend', open + html + close + ' ');
+    });
+  });
+}
+if (!REDUCED) document.querySelectorAll('[data-split]').forEach(splitWords);
+
+/* ============================================================
+   THREE.JS — floating brand prisms behind the hero.
+   Decorative only: skipped on mobile / reduced motion / no WebGL,
+   paused when the hero is off screen.
+   ============================================================ */
+(function(){
+  if (REDUCED || MOBILE || typeof THREE === 'undefined') return;
+  var wrap = document.getElementById('threeWrap');
+  var renderer;
+  try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); }
+  catch(e){ return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  wrap.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, wrap.clientWidth / wrap.clientHeight, 0.1, 100);
+  camera.position.z = 14;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  var key = new THREE.DirectionalLight(0xffffff, 0.7); key.position.set(4, 6, 8); scene.add(key);
+
+  var palette = [0x5863E7, 0x8CE7E5, 0xF2D8A5, 0xBBBEF3];
+  var group = new THREE.Group();
+  for (var i = 0; i < 16; i++) {
+    var geo = i % 3 === 0 ? new THREE.OctahedronGeometry(0.55)
+                          : new THREE.TetrahedronGeometry(0.62);
+    var solid = i % 2 === 0;
+    var mat = solid
+      ? new THREE.MeshStandardMaterial({ color: palette[i % 4], roughness: 0.35, metalness: 0.1,
+          transparent: true, opacity: 0.85 })
+      : new THREE.MeshBasicMaterial({ color: palette[i % 4], wireframe: true,
+          transparent: true, opacity: 0.5 });
+    var m = new THREE.Mesh(geo, mat);
+    m.position.set((Math.random() - 0.5) * 22, (Math.random() - 0.5) * 11, (Math.random() - 0.5) * 6 - 1);
+    m.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+    m.userData = { rs: 0.2 + Math.random() * 0.5, fs: 0.4 + Math.random() * 0.8,
+                   fa: 0.15 + Math.random() * 0.35, y0: m.position.y, ph: Math.random() * Math.PI * 2 };
+    group.add(m);
+  }
+  scene.add(group);
+
+  // mouse parallax
+  var mx = 0, my = 0;
+  window.addEventListener('pointermove', function(e){
+    mx = (e.clientX / window.innerWidth  - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  }, { passive: true });
+
+  // pause when hero is out of view
+  var running = true;
+  new IntersectionObserver(function(en){ running = en[0].isIntersecting; }, { threshold: 0 })
+    .observe(document.getElementById('hero'));
+
+  var clock = new THREE.Clock();
+  renderer.setAnimationLoop(function(){
+    if (!running) return;
+    var t = clock.getElapsedTime();
+    group.children.forEach(function(m){
+      m.rotation.x += 0.002 * m.userData.rs;
+      m.rotation.y += 0.003 * m.userData.rs;
+      m.position.y = m.userData.y0 + Math.sin(t * m.userData.fs + m.userData.ph) * m.userData.fa;
+    });
+    group.rotation.y += (mx * 0.25 - group.rotation.y) * 0.04;
+    group.rotation.x += (my * 0.15 - group.rotation.x) * 0.04;
+    renderer.render(scene, camera);
+  });
+
+  window.addEventListener('resize', function(){
+    camera.aspect = wrap.clientWidth / wrap.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+  });
+})();
+
+/* ============================================================
+   PHOTO CARD — 3D tilt toward the cursor
+   ============================================================ */
+(function(){
+  var card = document.getElementById('tiltCard');
+  if (!card || REDUCED || MOBILE || !hasGSAP) return;
+  var rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3.out' });
+  var ry = gsap.quickTo(card, 'rotationY', { duration: 0.6, ease: 'power3.out' });
+  var scene = card.parentElement;
+  scene.addEventListener('pointermove', function(e){
+    var r = card.getBoundingClientRect();
+    ry(((e.clientX - r.left) / r.width  - 0.5) *  14);
+    rx(((e.clientY - r.top)  / r.height - 0.5) * -14);
+  });
+  scene.addEventListener('pointerleave', function(){ rx(0); ry(0); });
+})();
+
+/* ============================================================
+   ENTRANCES + SCROLL EFFECTS
+   ============================================================ */
+function countUp(scope){
+  if (!hasGSAP) return;
+  (scope || document).querySelectorAll('[data-count]').forEach(function(el){
+    var end = +el.dataset.count, o = { v: 0 };
+    gsap.to(o, { v: end, duration: 1.4, ease: 'power2.out', delay: 0.4,
+      onUpdate: function(){ el.textContent = Math.round(o.v).toLocaleString('en-US'); } });
+  });
+}
+
+if (hasGSAP && !REDUCED) {
+  gsap.defaults({ ease: 'power4.out' });
+
+  // hero intro
+  gsap.timeline()
+    .to('#hero h1 .wi', { y: 0, duration: 0.9, stagger: 0.03 }, 0.1)
+    .to('#hero .rv', { opacity: 1, y: 0, duration: 0.8, stagger: 0.09 }, 0.2)
+    .from('.photo-card', { scale: 0.9, opacity: 0, duration: 1, ease: 'power3.out' }, 0.15);
+  countUp(document.getElementById('panel-abdan'));
+
+  // section entrances
+  document.querySelectorAll('[data-split]').forEach(function(h){
+    if (h.closest('#hero')) return;
+    gsap.to(h.querySelectorAll('.wi'), {
+      y: 0, duration: 0.85, stagger: 0.028,
+      scrollTrigger: { trigger: h, start: 'top 84%', once: true }
+    });
+  });
+  ScrollTrigger.batch(
+    Array.prototype.filter.call(document.querySelectorAll('.rv'), function(el){ return !el.closest('#hero'); }),
+    { start: 'top 88%', once: true,
+      onEnter: function(els){ gsap.to(els, { opacity: 1, y: 0, duration: 0.75, stagger: 0.08 }); } });
+
+  // timeline: line draws + items light up
+  gsap.to('#tlFill', { scaleY: 1, ease: 'none',
+    scrollTrigger: { trigger: '.tl', start: 'top 75%', end: 'bottom 55%', scrub: 0.6 } });
+  document.querySelectorAll('.tl-item').forEach(function(item){
+    ScrollTrigger.create({ trigger: item, start: 'top 70%', once: true,
+      onEnter: function(){ item.classList.add('lit'); } });
+    gsap.from(item, { x: 34, opacity: 0, duration: 0.7,
+      scrollTrigger: { trigger: item, start: 'top 85%', once: true } });
+  });
+
+  var rT; window.addEventListener('resize', function(){
+    clearTimeout(rT); rT = setTimeout(function(){ ScrollTrigger.refresh(); }, 200);
+  });
+} else {
+  document.querySelectorAll('.rv').forEach(function(el){ el.style.opacity = 1; el.style.transform = 'none'; });
+  document.querySelectorAll('[data-count]').forEach(function(el){ el.textContent = (+el.dataset.count).toLocaleString('en-US'); });
+  var tf = document.getElementById('tlFill'); if (tf) tf.style.transform = 'scaleY(1)';
+  document.querySelectorAll('.tl-item').forEach(function(i){ i.classList.add('lit'); });
+}
+
+/* ============================================================
+   TABS — Abdan ⇄ Bedur (GSAP crossfade, hash deep-link)
+   ============================================================ */
+var tabs = document.querySelectorAll('.tab');
+var abdanSections = document.getElementById('abdanSections');
+function setFounder(name, animate){
+  tabs.forEach(function(t){
+    var on = t.dataset.founder === name;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on);
+  });
+  var showPanel = document.getElementById('panel-' + name);
+  var hidePanel = document.querySelector('.panel.active');
+  if (hidePanel === showPanel) return;
+  abdanSections.style.display = name === 'abdan' ? '' : 'none';
+
+  function swap(){
+    if (hidePanel) hidePanel.classList.remove('active');
+    showPanel.classList.add('active');
+    if (hasGSAP) ScrollTrigger.refresh();
+  }
+  if (animate && hasGSAP && !REDUCED) {
+    gsap.to(hidePanel, { opacity: 0, y: 16, duration: 0.28, ease: 'power2.in', onComplete: function(){
+      gsap.set(hidePanel, { clearProps: 'all' });
+      swap();
+      gsap.fromTo(showPanel, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power4.out' });
+    }});
+  } else swap();
+  if (history.replaceState) history.replaceState(null, '', '#' + name);
+}
+tabs.forEach(function(t){
+  t.addEventListener('click', function(){ setFounder(t.dataset.founder, true); });
+});
+if (location.hash === '#bedur') setFounder('bedur', false);
+})();
+</script>
+</body>
+</html>
