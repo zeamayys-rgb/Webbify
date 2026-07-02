@@ -6,8 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import './home.css';
 
-/* TODO: replace 62XXXXXXXXXXX with the real Webbify WhatsApp number */
-const WA = 'https://wa.me/62XXXXXXXXXXX';
+const WA = 'https://wa.me/6281264404887';
 
 const MQ_ITEMS = ['PROTOTYPE FIRST', 'AI-POWERED', 'HUMAN-PILOTED', 'CUSTOM, NEVER TEMPLATED', 'FAST. SECURE. SHIPPED.'];
 

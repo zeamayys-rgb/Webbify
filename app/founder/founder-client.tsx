@@ -7,8 +7,7 @@ import Lenis from 'lenis';
 import * as THREE from 'three';
 import './founder.css';
 
-/* TODO: replace 62XXXXXXXXXXX with the real Webbify WhatsApp number */
-const WA = 'https://wa.me/62XXXXXXXXXXX';
+const WA = 'https://wa.me/6281264404887';
 
 const LOGOS = [
   { src: '/asset/logos/google.png', alt: 'Google' },
