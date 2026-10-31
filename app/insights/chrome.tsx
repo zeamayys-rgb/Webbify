@@ -109,8 +109,8 @@ export function InsightsNav() {
         </div>
         <div className="menu-foot">
           <span>halo@webbify.id</span>
-          <a href="https://webbify-id.vercel.app" target="_blank" rel="noopener">
-            webbify-id.vercel.app
+          <a href="https://webbify.id" target="_blank" rel="noopener">
+            webbify.id
           </a>
         </div>
       </div>
@@ -159,8 +159,8 @@ export function InsightsFooter() {
                 <a href="mailto:halo@webbify.id">halo@webbify.id</a>
               </li>
               <li>
-                <a href="https://webbify-id.vercel.app" target="_blank" rel="noopener">
-                  webbify-id.vercel.app
+                <a href="https://webbify.id" target="_blank" rel="noopener">
+                  webbify.id
                 </a>
               </li>
             </ul>

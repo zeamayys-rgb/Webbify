@@ -457,7 +457,7 @@ export default function HomeClient() {
         </div>
         <div className="menu-foot">
           <span>halo@webbify.id</span>
-          <a href="https://webbify-id.vercel.app" target="_blank" rel="noopener">webbify-id.vercel.app</a>
+          <a href="https://webbify.id" target="_blank" rel="noopener">webbify.id</a>
         </div>
       </div>
 
@@ -698,7 +698,7 @@ export default function HomeClient() {
               <ul>
                 <li><a href="mailto:halo@webbify.id">halo@webbify.id</a></li>
                 <li><a href={WA} target="_blank" rel="noopener">WhatsApp</a></li>
-                <li><a href="https://webbify-id.vercel.app" target="_blank" rel="noopener">webbify-id.vercel.app</a></li>
+                <li><a href="https://webbify.id" target="_blank" rel="noopener">webbify.id</a></li>
               </ul>
             </div>
           </div>
