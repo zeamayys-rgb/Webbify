@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Webbify Insights — personal learning notes on product design, research, and building calm, useful software. Written by Abdan.">
+<title>Insights — Webbify</title>
+
+<!-- Favicon: flat Webbify W mark -->
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64"><polygon points="2,2 58,2 30,60" fill="%238CE7E5"/><polygon points="42,2 98,2 70,60" fill="%23F2D8A5" opacity="0.92"/><polygon points="40,2 60,2 50,23" fill="%235863E7"/></svg>'>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@400;600&family=Montserrat:ital,wght@1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   WEBBIFY — DESIGN TOKENS (mirrors app/home.css exactly)
+   ============================================================ */
+:root{
+  --indigo:#5863E7; --indigo-light:#7982EC; --indigo-100:#BBBEF3;
+  --turq:#8CE7E5;   --turq-100:#D5F7F6;    --turq-50:#E9F9F8;
+  --sand:#F2D8A5;   --sand-100:#F7E8C9;    --sand-50:#FAF1E2;
+  --bg:#F7F7F7; --surface:#FFFFFF; --muted:#666666;
+  --ink:#1E2130;
+  --wa:#25D366;
+  --font-display:'Poppins',sans-serif;
+  --font-body:'Open Sans',sans-serif;
+  --font-tag:'Montserrat',sans-serif;
+  --radius:18px; --radius-pill:100px;
+  --shadow-sm:0 2px 14px rgba(30,33,48,.06);
+  --shadow-md:0 12px 40px rgba(30,33,48,.10);
+  --shadow-lg:0 28px 70px rgba(30,33,48,.14);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --line:rgba(30,33,48,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body); background:var(--bg); color:var(--muted);
+  font-size:16px; line-height:1.7; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);line-height:1.12;font-weight:800}
+a{text-decoration:none;color:inherit}
+img,svg{display:block;max-width:100%}
+button{font:inherit;cursor:pointer}
+::selection{background:var(--indigo);color:#fff}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--indigo-100);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--indigo-light)}
+
+/* ---------- shared (from home.css) ---------- */
+.wrap{max-width:1200px;margin:0 auto;padding:0 5%}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-weight:600;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);
+  margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:9px;height:9px;
+  background:var(--indigo);clip-path:polygon(0 0,100% 0,50% 100%)}
+.h-xl{font-size:clamp(34px,4.6vw,56px);letter-spacing:-.02em;margin-bottom:18px}
+.h-lg{font-size:clamp(28px,3.6vw,44px);letter-spacing:-.02em;margin-bottom:16px}
+.sub{font-size:17px;max-width:560px}
+.accent{color:var(--indigo)}
+.hl{position:relative;white-space:nowrap}
+.hl::after{content:'';position:absolute;left:-2px;right:-2px;bottom:.08em;height:.34em;
+  background:var(--sand);z-index:-1;border-radius:3px;
+  transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease) .3s}
+.is-in .hl::after{transform:scaleX(1)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-display);font-weight:700;font-size:15px;
+  padding:15px 30px;border-radius:var(--radius-pill);cursor:pointer;border:none;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease);
+}
+.btn-primary{background:var(--indigo);color:#fff;box-shadow:0 8px 26px rgba(88,99,231,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(88,99,231,.45);background:#4a55e0}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(30,33,48,.18)}
+.btn-ghost:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-2px)}
+.btn .arr{transition:transform .25s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* reveal-on-scroll */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rv.is-in{opacity:1;transform:none}
+
+/* ============================================================
+   NAV (matches site nav)
+   ============================================================ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .3s var(--ease),box-shadow .3s var(--ease)}
+nav.scrolled{background:rgba(247,247,247,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(30,33,48,.06)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 5%;height:76px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{width:34px}
+.brand-name{font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink);letter-spacing:-.01em}
+.brand-name i{font-style:normal;color:var(--indigo)}
+.brand-sep{font-family:var(--font-tag);font-style:italic;font-size:13px;color:var(--indigo);margin-left:8px;padding-left:12px;border-left:1px solid var(--line)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink);
+  padding:8px 14px;border-radius:10px;transition:color .2s,background .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--indigo);background:rgba(88,99,231,.07)}
+.nav-cta{margin-left:10px;padding:11px 22px;font-size:13.5px}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:10px;z-index:1102}
+.burger span{width:24px;height:2px;background:var(--ink);border-radius:2px;transition:transform .3s var(--ease),opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#menu{position:fixed;inset:0;z-index:1100;background:var(--ink);display:flex;align-items:center;
+  visibility:hidden;clip-path:inset(0 0 100% 0);transition:clip-path .6s var(--ease),visibility 0s .6s}
+#menu.open{visibility:visible;clip-path:inset(0 0 0 0);transition:clip-path .6s var(--ease),visibility 0s}
+.menu-links{position:relative;z-index:2;padding:0 8%;display:flex;flex-direction:column;gap:6px}
+.menu-links a{font-family:var(--font-display);font-weight:800;color:#fff;
+  font-size:clamp(38px,7.5vw,72px);line-height:1.15;letter-spacing:-.02em;display:flex;align-items:baseline;gap:18px}
+.menu-links a .num{font-size:14px;font-weight:600;color:var(--indigo-light);letter-spacing:.1em}
+.menu-links a:hover{color:var(--indigo-light)}
+.menu-foot{position:absolute;bottom:36px;left:8%;right:8%;display:flex;justify-content:space-between;
+  font-size:13px;color:rgba(255,255,255,.5);flex-wrap:wrap;gap:10px}
+.menu-foot a{color:var(--turq)}
+
+/* ============================================================
+   INSIGHTS HERO
+   ============================================================ */
+#hero{position:relative;padding:160px 0 70px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-blob-1{position:absolute;width:640px;height:640px;top:-200px;right:-160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(140,231,229,.30),transparent 65%)}
+.hero-blob-2{position:absolute;width:520px;height:520px;bottom:-260px;left:-140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,216,165,.35),transparent 65%)}
+.tri-field{position:absolute;inset:0;opacity:.5}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:end}
+#hero h1{font-size:clamp(38px,5.4vw,66px);letter-spacing:-.025em;margin-bottom:20px}
+.hero-sub{font-size:18px;max-width:520px;margin-bottom:28px}
+.hero-meta{display:flex;gap:28px;flex-wrap:wrap}
+.stat .n{font-family:var(--font-display);font-weight:800;font-size:26px;color:var(--ink);line-height:1}
+.stat .n b{color:var(--indigo)}
+.stat .l{font-size:12.5px;margin-top:5px}
+.stat+.stat{padding-left:28px;border-left:1px solid rgba(30,33,48,.1)}
+
+/* author card (right column of hero) */
+.author-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:26px 28px;
+  box-shadow:var(--shadow-sm);display:flex;gap:18px;align-items:center;max-width:460px;justify-self:end}
+.author-ava{width:64px;height:64px;border-radius:18px;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(135deg,var(--indigo),var(--indigo-light));color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:24px}
+.author-ava img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.author-name{font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink)}
+.author-role{font-family:var(--font-display);font-weight:600;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin:3px 0 8px}
+.author-bio{font-size:13.5px}
+
+/* ============================================================
+   CONTENT SYSTEM — toolbar (topics / search / sort)
+   ============================================================ */
+#toolbar{position:sticky;top:76px;z-index:900;background:rgba(247,247,247,.86);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0}
+.tb-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topics{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;font-size:13px;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line);padding:8px 16px;border-radius:var(--radius-pill);
+  transition:all .2s var(--ease);white-space:nowrap}
+.pill:hover{border-color:var(--indigo);color:var(--indigo);transform:translateY(-1px)}
+.pill.active{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 6px 18px rgba(88,99,231,.3)}
+.pill .dot{width:8px;height:8px;clip-path:polygon(0 0,100% 0,50% 100%);background:currentColor;opacity:.75}
+.pill .cnt{font-size:11px;opacity:.6;font-weight:600}
+.tb-tools{display:flex;gap:10px;align-items:center}
+.search{position:relative}
+.search input{font-family:var(--font-body);font-size:14px;padding:10px 14px 10px 38px;border-radius:var(--radius-pill);
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);width:230px;outline:none;transition:border-color .2s,box-shadow .2s}
+.search input:focus{border-color:var(--indigo);box-shadow:0 0 0 4px rgba(88,99,231,.12)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#9aa0ad}
+.sort{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);padding:10px 14px;border-radius:var(--radius-pill);appearance:none;
+  -webkit-appearance:none;cursor:pointer;padding-right:34px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpolygon points='0,0 10,0 5,6' fill='%235863E7'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+
+/* ============================================================
+   COLLECTIONS (learning tracks)
+   ============================================================ */
+#collections{padding:70px 0 10px}
+.col-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.col-head .sub{font-size:15px}
+.col-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.collection{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;
+  padding:26px 26px 24px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease);
+  display:flex;flex-direction:column;gap:10px;min-height:170px;text-align:left;cursor:pointer}
+.collection:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:rgba(88,99,231,.35)}
+.collection.active{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(88,99,231,.15)}
+.collection .big-tri{position:absolute;right:-18px;bottom:-26px;width:120px;height:120px;clip-path:polygon(0 0,100% 0,50% 100%);opacity:.9;pointer-events:none}
+.collection:nth-child(3n+1) .big-tri{background:var(--turq-100)}
+.collection:nth-child(3n+2) .big-tri{background:rgba(88,99,231,.12)}
+.collection:nth-child(3n+3) .big-tri{background:var(--sand-100)}
+.col-kicker{font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo)}
+.collection h3{font-size:19px;position:relative;z-index:1}
+.collection p{font-size:13.5px;position:relative;z-index:1;max-width:88%}
+.col-foot{margin-top:auto;font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink);display:flex;gap:8px;align-items:center;position:relative;z-index:1}
+.col-foot .prog{flex:1;height:4px;background:rgba(30,33,48,.08);border-radius:2px;overflow:hidden;max-width:110px}
+.col-foot .prog i{display:block;height:100%;background:var(--indigo);border-radius:2px}
+
+/* ============================================================
+   POST GRID
+   ============================================================ */
+#posts{padding:60px 0 110px}
+.posts-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.posts-head .status{font-size:13.5px}
+.posts-head .status b{color:var(--ink);font-weight:600}
+.clear{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--indigo);background:none;border:none;display:none}
+.clear.show{display:inline}
+
+.featured{display:grid;grid-template-columns:1.15fr .85fr;gap:0;background:var(--surface);border:1px solid var(--line);
+  border-radius:26px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:24px;cursor:pointer;
+  transition:box-shadow .4s var(--ease),transform .4s var(--ease)}
+.featured:hover{box-shadow:var(--shadow-md);transform:translateY(-4px)}
+.feat-body{padding:44px 42px}
+.feat-visual{position:relative;min-height:300px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.feat-visual .cover{position:absolute;inset:0}
+.feat-badge{position:absolute;top:18px;left:18px;background:var(--ink);color:#fff;font-family:var(--font-display);
+  font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:var(--radius-pill);z-index:2}
+.featured h2{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.02em;margin:14px 0 14px}
+.featured p.ex{font-size:15.5px;max-width:520px}
+
+.post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;cursor:pointer;
+  display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease)}
+.post:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:rgba(88,99,231,.3)}
+.post-cover{aspect-ratio:16/9.5;position:relative;overflow:hidden}
+.post-cover .cover{position:absolute;inset:0;transition:transform .6s var(--ease)}
+.post:hover .post-cover .cover{transform:scale(1.05)}
+.post-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+.post h3{font-size:18.5px;letter-spacing:-.01em;margin:10px 0 10px;position:relative;display:inline}
+.post h3 span{background-image:linear-gradient(var(--indigo),var(--indigo));background-size:0 2px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .45s var(--ease)}
+.post:hover h3 span{background-size:100% 2px}
+.post p.ex{font-size:14px;margin-bottom:16px}
+.post-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:#9aa0ad}
+.post-foot .read{font-family:var(--font-display);font-weight:700;color:var(--indigo);font-size:12.5px}
+
+/* meta line (topic + date + reading time) */
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#9aa0ad}
+.topic-tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-weight:600;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:var(--radius-pill)}
+.topic-tag::before{content:'';width:7px;height:7px;clip-path:polygon(0 0,100% 0,50% 100%);background:currentColor}
+.t-design{background:rgba(88,99,231,.12);color:var(--indigo)}
+.t-research{background:var(--turq-100);color:#1a7a78}
+.t-product{background:var(--sand-100);color:#8a6410}
+.t-craft{background:rgba(37,211,102,.12);color:#128a43}
+.t-notes{background:rgba(30,33,48,.07);color:var(--ink)}
+.meta .sep{width:3px;height:3px;border-radius:50%;background:#c9ccda}
+
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--font-display);font-weight:600;font-size:11.5px;color:var(--muted);background:var(--bg);
+  border:1px solid var(--line);padding:4px 10px;border-radius:var(--radius-pill);transition:all .2s}
+.tag:hover,.tag.active{color:var(--indigo);border-color:var(--indigo);background:rgba(88,99,231,.06)}
+
+/* generated covers: brand geometry, no images needed */
+.cover{display:flex;align-items:center;justify-content:center}
+.cover svg{width:100%;height:100%}
+
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;background:var(--surface);border:1px dashed rgba(30,33,48,.18);border-radius:22px}
+.empty h3{font-size:20px;margin-bottom:8px}
+
+/* ============================================================
+   TAG CLOUD (all tags)
+   ============================================================ */
+#tagcloud{padding:0 0 90px}
+.cloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+
+/* ============================================================
+   ARTICLE VIEW
+   ============================================================ */
+#article{display:none;padding:140px 0 110px;position:relative}
+#article.show{display:block}
+body.reading #home{display:none}
+.art-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;font-size:13.5px;color:var(--indigo);margin-bottom:34px}
+.art-back svg{width:14px;height:14px;transition:transform .25s var(--ease)}
+.art-back:hover svg{transform:translateX(-3px)}
+.art-head{max-width:820px}
+.art-head h1{font-size:clamp(32px,4.4vw,54px);letter-spacing:-.025em;margin:16px 0 18px}
+.art-head .lede{font-size:19px;color:var(--muted);max-width:700px}
+.art-byline{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.art-byline .ava{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--indigo-light));overflow:hidden;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800}
+.art-byline .ava img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.art-byline .who{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--ink)}
+.art-byline .when{font-size:12.5px;color:#9aa0ad}
+
+.art-layout{display:grid;grid-template-columns:minmax(0,760px) 260px;gap:60px;margin-top:50px;align-items:start}
+.art-body{font-size:17px;line-height:1.8;color:#3d4152}
+.art-body>*+*{margin-top:1.25em}
+.art-body h2{font-size:clamp(24px,2.6vw,32px);letter-spacing:-.02em;margin-top:2.2em;scroll-margin-top:110px}
+.art-body h3{font-size:20px;margin-top:1.8em;scroll-margin-top:110px}
+.art-body p strong{color:var(--ink);font-weight:600}
+.art-body ul,.art-body ol{padding-left:1.4em}
+.art-body li{margin-top:.5em}
+.art-body ul li::marker{color:var(--indigo)}
+.art-body a{color:var(--indigo);border-bottom:1.5px solid rgba(88,99,231,.3);transition:border-color .2s}
+.art-body a:hover{border-color:var(--indigo)}
+.art-body blockquote{border-left:3px solid var(--sand);padding:4px 0 4px 22px;font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--ink);line-height:1.45}
+.art-body code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:rgba(88,99,231,.08);color:var(--indigo);padding:2px 7px;border-radius:6px}
+.art-body hr{border:none;height:1px;background:var(--line);margin:2.5em 0}
+.art-body figure{margin:2em 0}
+.art-body figcaption{font-size:13px;color:#9aa0ad;margin-top:10px}
+
+/* callouts */
+.callout{border-radius:18px;padding:22px 26px;border:1px solid transparent}
+.callout .cl-k{font-family:var(--font-display);font-weight:700;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.callout .cl-k::before{content:'';width:8px;height:8px;clip-path:polygon(0 0,100% 0,50% 100%);background:currentColor}
+.callout p{font-size:15.5px}
+.callout.apply{background:var(--turq-50);border-color:rgba(140,231,229,.5)}
+.callout.apply .cl-k{color:#1a7a78}
+.callout.note{background:var(--sand-50);border-color:rgba(242,216,165,.6)}
+.callout.note .cl-k{color:#8a6410}
+.callout.key{background:rgba(88,99,231,.06);border-color:rgba(88,99,231,.2)}
+.callout.key .cl-k{color:var(--indigo)}
+
+/* principle cards inside article */
+.principle{display:grid;grid-template-columns:64px 1fr;gap:18px;padding:26px 0;border-top:1px solid var(--line)}
+.principle:last-of-type{border-bottom:1px solid var(--line)}
+.principle .pn{font-family:var(--font-display);font-weight:800;font-size:44px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--indigo-100)}
+.principle h3{margin:0 0 8px;font-size:20px}
+.principle p{font-size:15.5px}
+.principle p+p{margin-top:.7em}
+
+/* checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);margin:0;font-size:15.5px}
+.checklist li::before{content:'';flex-shrink:0;width:18px;height:18px;margin-top:4px;border-radius:5px;border:1.5px solid var(--indigo-100);background:#fff}
+
+/* sidebar */
+.art-side{position:sticky;top:110px;display:flex;flex-direction:column;gap:26px}
+.side-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.side-box h4{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;color:var(--indigo)}
+.toc{list-style:none;display:flex;flex-direction:column;gap:6px}
+.toc a{display:block;font-size:13.5px;color:var(--muted);padding:4px 0 4px 12px;border-left:2px solid transparent;transition:all .2s;line-height:1.4}
+.toc a:hover,.toc a.on{color:var(--ink);border-color:var(--indigo)}
+.toc a.h3{padding-left:22px;font-size:12.5px}
+.side-tags{display:flex;flex-wrap:wrap;gap:6px}
+.side-src a{display:block;font-size:13px;color:var(--indigo);margin-top:6px;line-height:1.4}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--indigo);z-index:1500;pointer-events:none}
+
+.art-nav{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:70px;max-width:760px}
+.art-nav a{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px;transition:all .3s var(--ease)}
+.art-nav a:hover{border-color:var(--indigo);transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+.art-nav .k{font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9aa0ad}
+.art-nav .t{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink);margin-top:6px;line-height:1.35}
+.art-nav a.next{text-align:right}
+.art-nav a.disabled{opacity:.4;pointer-events:none}
+
+.related{margin-top:80px;padding-top:50px;border-top:1px solid var(--line)}
+.related .post-grid{margin-top:26px}
+
+/* ============================================================
+   SUBSCRIBE CTA + FOOTER
+   ============================================================ */
+#cta{text-align:center;position:relative;overflow:hidden;padding:110px 0;background:var(--ink)}
+#cta .tri-field{opacity:.14}
+#cta .eyebrow{color:#fff}#cta .eyebrow::before{background:var(--sand)}
+#cta .h-lg{color:#fff;font-size:clamp(28px,4vw,46px)}
+#cta .sub{color:rgba(255,255,255,.62);margin:0 auto 34px}
+.cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center;position:relative;z-index:2}
+.cta-row .btn-ghost{color:#fff;border-color:rgba(255,255,255,.3)}
+.cta-row .btn-ghost:hover{border-color:var(--turq);color:var(--turq)}
+footer{border-top:1px solid rgba(30,33,48,.08);padding:54px 0 34px;background:var(--bg)}
+.foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:40px}
+.foot-brand{max-width:300px}
+.foot-tag{font-family:var(--font-tag);font-style:italic;font-size:13.5px;color:var(--indigo);margin:10px 0 12px}
+.foot-desc{font-size:13.5px}
+.foot-col h4{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.foot-col a{font-size:14px;transition:color .2s}
+.foot-col a:hover{color:var(--indigo)}
+.foot-bottom{border-top:1px solid rgba(30,33,48,.07);padding-top:24px;display:flex;justify-content:space-between;font-size:12.5px;color:#9aa0ad;flex-wrap:wrap;gap:8px}
+
+
+/* ============================================================
+   CALM CRIT — interactive checklist note
+   ============================================================ */
+.viz-title{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.viz-title::before{content:'';width:8px;height:8px;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--indigo)}
+figure.viz{margin:2.2em 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px 26px 20px;box-shadow:var(--shadow-sm)}
+figure.viz.tint{background:linear-gradient(180deg,#fff,var(--bg))}
+figure.viz figcaption{font-size:13px;color:#9aa0ad;margin-top:14px;line-height:1.5}
+figure.viz figcaption b{color:var(--ink);font-weight:600}
+svg text{font-family:var(--font-display)}
+.svg-body{font-family:var(--font-body)!important}
+
+.ladder input[type=range]{width:100%;accent-color:var(--indigo);margin:6px 0 12px}
+.ladder-info{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 18px;min-height:74px}
+.ladder-k{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--ink);display:flex;align-items:center;gap:10px}
+.ladder-k i{display:inline-block;width:10px;height:10px;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--indigo)}
+.ladder-d{font-size:14px;margin-top:4px}
+.ladder-d b{color:var(--ink);font-weight:600}
+#ladder svg .rung{transition:opacity .25s var(--ease),transform .25s var(--ease)}
+
+.crit{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow-sm);margin:2em 0}
+.crit-top{display:flex;gap:14px;align-items:end;flex-wrap:wrap;justify-content:space-between;margin-bottom:22px}
+.crit-name{flex:1;min-width:240px}
+.crit-name span{display:block;font-family:var(--font-display);font-weight:600;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:6px}
+.crit-name input{width:100%;font-family:var(--font-display);font-weight:700;font-size:17px;color:var(--ink);padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s}
+.crit-name input:focus{border-color:var(--indigo);box-shadow:0 0 0 4px rgba(88,99,231,.12)}
+.crit-actions{display:flex;gap:8px}
+.crit-score{display:grid;grid-template-columns:120px 1fr;gap:26px;align-items:center;padding:18px 0 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:8px}
+.ring{position:relative;width:120px;height:120px}
+.ring svg{width:100%;height:100%}
+#ring-arc{transition:stroke-dashoffset .6s var(--ease),stroke .4s}
+.ring-n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ring-n b{font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--ink)}
+.ring-n small{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9aa0ad;margin-top:4px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar{display:grid;grid-template-columns:150px 1fr 44px;gap:12px;align-items:center;font-size:13px}
+.bar .bl{font-family:var(--font-display);font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.bar .bl i{width:8px;height:8px;clip-path:polygon(0 0,100% 0,50% 100%);display:inline-block}
+.bar .bt{height:8px;background:rgba(30,33,48,.07);border-radius:4px;overflow:hidden}
+.bar .bt i{display:block;height:100%;width:0;border-radius:4px;transition:width .5s var(--ease),background .4s}
+.bar .bv{font-family:var(--font-display);font-weight:700;color:var(--ink);text-align:right;font-size:12.5px}
+.bar .bv.na{color:#9aa0ad;font-weight:600}
+
+.crit-group{padding:18px 0 6px}
+.crit-group+.crit-group{border-top:1px solid var(--line)}
+.cg-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.cg-head h3{font-size:17px;margin:0;display:flex;align-items:center;gap:10px}
+.cg-head h3 i{width:10px;height:10px;clip-path:polygon(0 0,100% 0,50% 100%);display:inline-block}
+.cg-head .cg-p{font-family:var(--font-display);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9aa0ad;white-space:nowrap}
+.q{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:11px 0;border-top:1px dashed rgba(30,33,48,.08)}
+.q:first-of-type{border-top:none}
+.q-t{font-size:15px;color:#3d4152;line-height:1.5}
+.q-t .qp{display:inline-flex;gap:3px;margin-left:8px;vertical-align:middle}
+.q-t .qp b{font-family:var(--font-display);font-weight:700;font-size:9.5px;width:16px;height:16px;border-radius:5px;background:rgba(88,99,231,.1);color:var(--indigo);display:inline-flex;align-items:center;justify-content:center}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-pill);padding:3px}
+.seg button{font-family:var(--font-display);font-weight:700;font-size:12px;padding:6px 12px;border-radius:var(--radius-pill);border:none;background:transparent;color:#9aa0ad;transition:all .2s var(--ease)}
+.seg button:hover{color:var(--ink)}
+.seg button.on[data-v="2"]{background:#128a43;color:#fff}
+.seg button.on[data-v="1"]{background:var(--sand);color:#5a3f05}
+.seg button.on[data-v="0"]{background:#e2574c;color:#fff}
+.seg button.on[data-v="x"]{background:var(--ink);color:#fff}
+.q.v2 .q-t{color:#3d4152}
+.q.v0 .q-t{color:var(--ink);font-weight:600}
+.q.vx .q-t{opacity:.45;text-decoration:line-through}
+
+.crit-verdict{margin-top:18px;background:rgba(88,99,231,.06);border:1px solid rgba(88,99,231,.2);border-radius:14px;padding:16px 20px;font-size:14.5px}
+.crit-verdict b{color:var(--ink);font-weight:700;font-family:var(--font-display)}
+.crit-verdict ul{margin:8px 0 0 1.2em;padding:0}
+.crit-verdict li{margin-top:4px}
+.crit-verdict.empty{color:#9aa0ad;background:var(--bg);border-color:var(--line)}
+
+.pmap{position:relative}
+.pmap svg{width:100%;height:auto}
+.pmap .pn{cursor:pointer}
+.pmap .pn rect{transition:fill .2s,stroke .2s}
+.pmap .pn:hover rect,.pmap .pn.on rect{fill:var(--indigo);stroke:var(--indigo)}
+.pmap .pn:hover text,.pmap .pn.on text,.pmap .pn:hover .pnum,.pmap .pn.on .pnum{fill:#fff}
+.pmap .ln{stroke:#BBBEF3;stroke-width:1.2;opacity:.45;transition:opacity .2s,stroke .2s,stroke-width .2s}
+.pmap.focus .ln{opacity:.08}
+.pmap.focus .ln.on{opacity:1;stroke:var(--indigo);stroke-width:2}
+.pmap .qn text{transition:fill .2s,font-weight .2s}
+.pmap.focus .qn text{fill:#9aa0ad}
+.pmap.focus .qn.on text{fill:var(--ink);font-weight:700}
+.pmap .qn .qdot{fill:#fff;stroke:#BBBEF3;stroke-width:1.5;transition:fill .2s,stroke .2s}
+.pmap.focus .qn.on .qdot{fill:var(--indigo);stroke:var(--indigo)}
+
+@media (max-width:640px){
+  .crit{padding:20px 16px}
+  .crit-score{grid-template-columns:1fr;justify-items:center}
+  .bars{width:100%}
+  .bar{grid-template-columns:110px 1fr 40px}
+  .q{grid-template-columns:1fr}
+  .seg{justify-self:start}
+}
+
+/* ============================================================
+   RESPONSIVE + REDUCED MOTION
+   ============================================================ */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr}
+  .author-card{justify-self:start}
+  .col-grid{grid-template-columns:1fr 1fr}
+  .post-grid{grid-template-columns:1fr 1fr}
+  .featured{grid-template-columns:1fr}
+  .feat-visual{min-height:220px;order:-1}
+  .art-layout{grid-template-columns:1fr}
+  .art-side{position:static}
+  .art-side .side-box.toc-box{display:none}
+}
+@media (max-width:900px){
+  .nav-links{display:none}
+  .burger{display:flex}
+  .brand-sep{display:none}
+}
+@media (max-width:640px){
+  #hero{padding:130px 0 50px}
+  .col-grid{grid-template-columns:1fr}
+  .post-grid{grid-template-columns:1fr}
+  .feat-body{padding:30px 26px}
+  .search input{width:100%}
+  .tb-tools{width:100%}
+  .search{flex:1}
+  #toolbar{top:76px}
+  .principle{grid-template-columns:1fr;gap:6px}
+  .principle .pn{font-size:36px}
+  .art-nav{grid-template-columns:1fr}
+  .art-nav a.next{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#/" class="brand">
+      <svg class="brand-icon" viewBox="0 0 100 64" aria-hidden="true">
+        <polygon points="2,2 58,2 30,60" fill="#8CE7E5"/>
+        <polygon points="42,2 98,2 70,60" fill="#F2D8A5" opacity="0.92"/>
+        <polygon points="40,2 60,2 50,23" fill="#5863E7"/>
+      </svg>
+      <span class="brand-name">Webbi<i>fy</i></span>
+      <span class="brand-sep">Insights</span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/#work">Work</a>
+      <a href="#/" class="active">Insights</a>
+      <a href="/#founders">Founders</a>
+      <a class="btn btn-primary nav-cta" href="https://wa.me/" target="_blank" rel="noopener">Chat on WhatsApp</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="menu" aria-hidden="true">
+  <div class="menu-links">
+    <a href="/"><span class="num">01</span><span class="mi">Home</span></a>
+    <a href="/#work"><span class="num">02</span><span class="mi">Work</span></a>
+    <a href="#/" data-close><span class="num">03</span><span class="mi">Insights</span></a>
+    <a href="/#founders"><span class="num">04</span><span class="mi">Founders</span></a>
+  </div>
+  <div class="menu-foot"><span>halo@webbify.id</span><a href="https://webbify.vercel.app" target="_blank" rel="noopener">webbify.vercel.app</a></div>
+</div>
+
+<main>
+<!-- ══════════════════════════════════════════════════════════
+     HOME VIEW (listing)
+     ══════════════════════════════════════════════════════════ -->
+<div id="home">
+
+  <section id="hero">
+    <div class="hero-bg">
+      <div class="hero-blob-1"></div><div class="hero-blob-2"></div>
+      <svg class="tri-field" width="100%" height="100%" aria-hidden="true">
+        <defs><pattern id="triP" width="120" height="120" patternUnits="userSpaceOnUse">
+          <polygon points="14,10 30,10 22,24" fill="none" stroke="#5863E7" stroke-width="1" opacity="0.10"/>
+          <polygon points="80,70 96,70 88,84" fill="none" stroke="#8CE7E5" stroke-width="1" opacity="0.16"/>
+        </pattern></defs>
+        <rect width="100%" height="100%" fill="url(#triP)"/>
+      </svg>
+    </div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow rv">Insights · Learning in public</div>
+        <h1 class="rv is-in">Notes on building <span class="hl">calm</span>, useful software.</h1>
+        <p class="hero-sub rv">A working notebook on product design, research, and the craft of shipping — written while doing the work, not after. Grouped so it stays useful as it grows.</p>
+        <div class="hero-meta rv">
+          <div class="stat"><div class="n"><b id="st-posts">0</b></div><div class="l">Notes</div></div>
+          <div class="stat"><div class="n"><b id="st-cols">0</b></div><div class="l">Collections</div></div>
+          <div class="stat"><div class="n"><b id="st-tags">0</b></div><div class="l">Tags</div></div>
+        </div>
+      </div>
+      <div class="author-card rv">
+        <div class="author-ava"><img src="/asset/abdan.jpg" alt="Abdan" onerror="this.remove()">A</div>
+        <div>
+          <div class="author-name">Abdan</div>
+          <div class="author-role">Product · Strategy · Design</div>
+          <p class="author-bio">Product designer, co-founder of Webbify. These are my own learning notes — opinions mine, mistakes mine too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Toolbar: topic filter · search · sort ─── -->
+  <div id="toolbar">
+    <div class="wrap tb-row">
+      <div class="topics" id="topics"></div>
+      <div class="tb-tools">
+        <label class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="q" placeholder="Search notes…" aria-label="Search notes">
+        </label>
+        <select class="sort" id="sort" aria-label="Sort">
+          <option value="new">Newest</option>
+          <option value="old">Oldest</option>
+          <option value="long">Longest read</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Collections (learning tracks) ─── -->
+  <section id="collections">
+    <div class="wrap">
+      <div class="col-head">
+        <div>
+          <div class="eyebrow rv">Collections</div>
+          <h2 class="h-lg rv" style="margin-bottom:8px">Learning tracks.</h2>
+          <p class="sub rv">Notes grouped by what I'm trying to get good at. Pick one to filter.</p>
+        </div>
+      </div>
+      <div class="col-grid" id="colgrid"></div>
+    </div>
+  </section>
+
+  <!-- ─── Posts ─── -->
+  <section id="posts">
+    <div class="wrap">
+      <div class="posts-head">
+        <div class="status" id="status"></div>
+        <button class="clear" id="clear">Clear filters ×</button>
+      </div>
+      <div id="featured"></div>
+      <div class="post-grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="tagcloud">
+    <div class="wrap">
+      <div class="eyebrow">Browse by tag</div>
+      <div class="cloud" id="cloud"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ARTICLE VIEW
+     ══════════════════════════════════════════════════════════ -->
+<section id="article"><div class="wrap" id="artwrap"></div></section>
+</main>
+
+<!-- ══════════════ CTA ══════════════ -->
+<section id="cta">
+  <svg class="tri-field" width="100%" height="100%" style="position:absolute;inset:0" aria-hidden="true">
+    <defs><pattern id="triD" width="140" height="140" patternUnits="userSpaceOnUse">
+      <polygon points="20,14 40,14 30,31" fill="none" stroke="#BBBEF3" stroke-width="1"/>
+      <polygon points="96,88 116,88 106,105" fill="none" stroke="#F2D8A5" stroke-width="1"/>
+    </pattern></defs>
+    <rect width="100%" height="100%" fill="url(#triD)"/>
+  </svg>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="eyebrow" style="display:inline-flex">Stay in the loop</div>
+    <h2 class="h-lg">New notes, when there's something worth saying.</h2>
+    <p class="sub">No schedule, no newsletter theatre. If you want to talk about any of this, the door's open.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="mailto:halo@webbify.id">Email Abdan <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="/">Back to Webbify</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand">
+          <svg class="brand-icon" viewBox="0 0 100 64" aria-hidden="true"><polygon points="2,2 58,2 30,60" fill="#8CE7E5"/><polygon points="42,2 98,2 70,60" fill="#F2D8A5" opacity="0.92"/><polygon points="40,2 60,2 50,23" fill="#5863E7"/></svg>
+          <span class="brand-name">Webbi<i>fy</i></span>
+        </div>
+        <div class="foot-tag">AI-Powered Web Agency</div>
+        <p class="foot-desc">Fast, custom websites — accelerated by AI, perfected by professionals. Prototype first, pay when you love it.</p>
+      </div>
+      <div class="foot-col"><h4>Explore</h4><ul>
+        <li><a href="/#how">How it works</a></li><li><a href="/#work">Work</a></li><li><a href="#/">Insights</a></li><li><a href="/#founders">Founders</a></li>
+      </ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul>
+        <li><a href="mailto:halo@webbify.id">halo@webbify.id</a></li><li><a href="https://webbify.vercel.app" target="_blank" rel="noopener">webbify.vercel.app</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom"><div>© 2026 Webbify. All rights reserved.</div><div>Jakarta, Indonesia</div></div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   CONTENT SYSTEM
+   ------------------------------------------------------------
+   Three levels of grouping, from coarse to fine:
+
+   1. TOPIC      — exactly one per post. The "section" of the blog.
+                   (design · research · product · craft · notes)
+   2. COLLECTION — optional, one per post. A learning track that
+                   spans topics (e.g. "Calm Technology" can hold a
+                   design note AND a research note).
+   3. TAGS       — many per post. Free-form, cross-cutting.
+
+   To add a post: push an object into POSTS. Body is plain HTML.
+   Headings (h2/h3) inside body auto-generate the table of contents.
+   When this moves into Next.js, POSTS becomes /content/*.md or an
+   MDX folder; the schema below is the frontmatter.
+   ============================================================ */
+
+const TOPICS = {
+  design:   { label:'Design',   cls:'t-design'   },
+  research: { label:'Research', cls:'t-research' },
+  product:  { label:'Product',  cls:'t-product'  },
+  craft:    { label:'Craft',    cls:'t-craft'    },
+  notes:    { label:'Notes',    cls:'t-notes'    },
+};
+
+const COLLECTIONS = {
+  'calm-tech': {
+    title:'Calm Technology',
+    kicker:'Attention-first design',
+    desc:'Working through Amber Case\'s eight principles and turning them into habits for dashboards, nonprofit sites and research.',
+  },
+  'design-ops': {
+    title:'How I work',
+    kicker:'Process & tooling',
+    desc:'The systems behind the work — how notes, critiques and AI-assisted builds fit together.',
+  },
+  'field-notes': {
+    title:'Field notes',
+    kicker:'From real projects',
+    desc:'Short observations from client and product work, written before I forget them.',
+  },
+};
+
+const AUTHOR = { name:'Abdan', ava:'/asset/abdan.jpg' };
+
+const POSTS = [
+/* ------------------------------------------------------------
+   A note can also live in its own HTML file (for long, illustrated
+   pieces). Give it `href` instead of `body`; the card links there.
+   ------------------------------------------------------------ */
+{
+  slug:'product-design-in-the-age-of-ai',
+  href:'insights-product-designer-age-of-ai.html',
+  title:'Product design in the age of AI, without losing the plot',
+  excerpt:'Illustrated reading notes on Gabi Duncombe\'s essay — curiosity over tools, the three lenses of product thinking, outcomes over artifacts, and finding your design fingerprint.',
+  date:'2026-10-30',
+  topic:'product',
+  collection:'design-ops',
+  tags:['product-thinking','ai','portfolio','career','reading-notes'],
+  readMins:9,
+  body:'',
+},
+/* ------------------------------------------------------------ */
+{
+  slug:'calm-tech-principles-for-product-designers',
+  title:'Calm Technology, applied: eight principles for product designers',
+  excerpt:'Attention is the scarce resource, not screen space. Here\'s how I\'m reading Amber Case\'s Calm Tech principles through the lens of dashboards, nonprofit sites and research.',
+  date:'2026-10-30',
+  topic:'design',
+  collection:'calm-tech',
+  tags:['calm-tech','attention','dashboards','principles','ux'],
+  featured:true,
+  sources:[
+    {t:'Principles of Calm Technology — Calm Tech Institute', u:'https://www.calmtech.institute/calm-tech-principles'},
+    {t:'Calm Technology: Principles and Patterns for Non-Intrusive Design (A. Case, 2015)', u:'https://www.amazon.com/Calm-Technology-Principles-Patterns-Non-Intrusive/dp/1491925884'},
+  ],
+  body:`
+<p>Most of my work is data-heavy screens for people who have better things to do than look at screens: conservation practitioners checking a decision tool, a school admin updating a page, a stakeholder glancing at a dashboard in a meeting. Calm Technology is the clearest framework I've found for that situation, so I'm writing it down the way I actually intend to use it.</p>
+
+<p>The lineage is Mark Weiser and John Seely Brown at Xerox PARC in the mid-90s, who argued that the scarce resource in computing was no longer processing power but <strong>human attention</strong>. Amber Case turned that into eight principles and a certification. The one-sentence version:</p>
+
+<blockquote>A good tool does its job and gets out of the way. The user should finish the task, not admire the interface.</blockquote>
+
+<p>That reframes success metrics. Engagement, time-on-screen and feature count are often <em>anti</em>-signals here. The better question: how much attention did we have to borrow to deliver the value?</p>
+
+<h2 id="principles">The eight principles</h2>
+
+<div class="principle">
+  <div class="pn">1</div>
+  <div>
+    <h3>Require the smallest possible amount of attention</h3>
+    <p>Deliver information at the lowest attention cost that still works. Case uses a ladder: a kettle whistle, a dimmed LED, a vibration — each is a cheaper interrupt than a modal dialog.</p>
+    <p><strong>For me:</strong> a dashboard should answer "do I need to act?" at a glance before it offers the full analysis. I audit screens by asking what a user learns in 2 seconds, 10 seconds and 2 minutes — and whether the 2-second layer even exists. Most data products skip it.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">2</div>
+  <div>
+    <h3>Inform and create calm</h3>
+    <p>A signal should leave the person more settled, not less. "Everything is fine" is a legitimate, valuable message. Alerts carry only what's needed to decide.</p>
+    <p><strong>For me:</strong> empty states, status indicators and loading states are where this lives. "No alerts in your region" is calmer than a blank panel. A persistent <em>nothing needs you</em> state is a designed feature, not an absence.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">3</div>
+  <div>
+    <h3>Make use of the periphery</h3>
+    <p>Attention has a center and an edge. Good design moves information between them: ambient when things are normal, foregrounded only when action is needed, then back.</p>
+    <p><strong>For me:</strong> glanceable, persistent context (a map thumbnail, a sparkline, a subtle coloured border) over dialogs and badges. The periphery of a dashboard is its sidebars, header strips and chart annotations. For every element: center or edge — and does it know how to move between them?</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">4</div>
+  <div>
+    <h3>Amplify the best of technology and the best of humanity</h3>
+    <p>Machines are good at consistency, memory and computation; humans at judgment, context and care. Don't make people do machine work, and don't make machines fake human work.</p>
+    <p><strong>For me:</strong> this is the design argument for AI-assisted products. Let the system pre-compute, pre-filter and remember; keep the interpretive call visibly in the practitioner's hands, with the reasoning exposed. It's also Webbify's "AI-powered, human-piloted" in one line.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">5</div>
+  <div>
+    <h3>Communicate without speaking</h3>
+    <p>Prefer non-verbal channels where they suffice: colour, shape, position, sound, motion. Language is expensive to parse; a tone or a light is not.</p>
+    <p><strong>For me:</strong> bilingual products benefit most. Every icon, colour code or spatial convention that carries meaning is one less string to translate and one less thing that breaks across cultures. Build a small visual vocabulary and use it consistently so users learn it once.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">6</div>
+  <div>
+    <h3>Still work when it fails</h3>
+    <p>Graceful degradation. An escalator that stops is still stairs. A system needs a useful lowest state: offline, slow network, missing data, old browser.</p>
+    <p><strong>For me:</strong> for field users on patchy connections this is a core requirement. Show cached data with an honest "as of" timestamp rather than a spinner. Make exports (PDF, static map) first-class so the tool's value survives without the tool. For websites: progressive enhancement, readable without JS.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">7</div>
+  <div>
+    <h3>The minimum tech needed to solve the problem</h3>
+    <p>Don't add sensors, screens, AI or features beyond what the problem requires. Every capability has an attention and maintenance cost.</p>
+    <p><strong>For me:</strong> my strongest tool against scope creep. Write the problem in one sentence, then ask what the least sophisticated thing that solves it would be. A good table often beats a 3D map; a scheduled email beats a real-time feed. For schools and foundations, "minimum tech" is also a budget and maintenance argument they understand instantly.</p>
+  </div>
+</div>
+<div class="principle">
+  <div class="pn">8</div>
+  <div>
+    <h3>Respect social norms</h3>
+    <p>Technology enters existing human contexts — meetings, homes, hierarchies. It should fit those norms and be introduced gradually so they can adapt.</p>
+    <p><strong>For me:</strong> in research this means studying how decisions actually get made (who presents to whom, in what format, in what language) before designing anything. A dashboard projected in a stakeholder meeting has different norms from one used alone at a desk. In Indonesian institutional contexts, how information moves up a hierarchy and what a "report" looks like are design constraints, not details.</p>
+  </div>
+</div>
+
+<h2 id="pillars">The four certification pillars</h2>
+<p>Calm Tech Certified evaluates products on <strong>periphery engagement, tactility, material harmony</strong> and <strong>durability</strong>. Two sound hardware-only, but they translate:</p>
+<ul>
+  <li><strong>Periphery engagement</strong> → principle 3. Can the product be used ambiently?</li>
+  <li><strong>Tactility</strong> → in software, the honesty of feedback. Does every interaction acknowledge input immediately and proportionately? Does motion confirm rather than decorate?</li>
+  <li><strong>Material harmony</strong> → does the product fit its visual and cultural environment instead of imposing a brand onto it?</li>
+  <li><strong>Durability</strong> → does it keep working for years? Low dependency count, stable URLs, exportable data, no forced upgrades. For nonprofit tools with thin maintenance budgets, this is a day-one design decision.</li>
+</ul>
+
+<h2 id="discipline">Making it a discipline, not a mood</h2>
+<div class="callout apply">
+  <div class="cl-k">How I'm applying this</div>
+  <p><strong>Attention budget in specs.</strong> Next to the user story, write the maximum attention the feature may demand ("glanceable; one click to resolve"). Treat it like a performance budget.</p>
+  <p><strong>Calm Tech heuristic review.</strong> Use the eight principles as a lens in critiques, the way you'd use Nielsen. Principles 1, 6 and 7 catch the most issues in data products.</p>
+  <p><strong>Failure states as deliverables.</strong> Offline, stale, empty and error states are part of every component spec, not an afterthought.</p>
+  <p><strong>Research questions that probe attention.</strong> Ask what people check first, what they ignore, what interrupts them, what they wish would just say "fine".</p>
+  <p><strong>Say no with principle 7.</strong> It gives a shared, non-personal vocabulary for pushing back on feature requests.</p>
+</div>
+
+<p>I'll keep adding to this collection as I try these in real projects. The checklist version lives in a <a href="#/post/calm-tech-crit-checklist">separate note</a>.</p>
+`},
+/* ------------------------------------------------------------ */
+{
+  slug:'calm-tech-crit-checklist',
+  title:'A Calm Tech checklist for design critiques',
+  excerpt:'The eight principles compressed into questions I can ask of any screen in under five minutes — now as a live scorecard you can run on a real screen.',
+  date:'2026-10-30',
+  topic:'craft',
+  collection:'calm-tech',
+  tags:['calm-tech','critique','checklist','dashboards','interactive'],
+  sources:[{t:'Principles of Calm Technology — Calm Tech Institute', u:'https://www.calmtech.institute/calm-tech-principles'}],
+  init:'initCalmCrit',
+  body:`
+<p>A companion to <a href="#/post/calm-tech-principles-for-product-designers">the longer breakdown</a>. Use it in a crit, on a Figma frame, or on a live screen. Not every question applies to every screen — skip the ones that don't. Your answers are saved in this browser per screen name, so you can come back to the same screen after a revision and see what moved.</p>
+
+<h2 id="attention-ladder">First, the attention ladder</h2>
+<p>Every signal a screen sends has a cost. Calm Tech's first rule is to pick the <strong>lowest rung that still works</strong>. Drag the handle to see what each rung demands of the person on the other side.</p>
+
+<figure class="viz">
+  <div class="viz-title">The attention ladder — pick the lowest rung that works</div>
+  <div class="ladder" id="ladder">
+    <svg viewBox="0 0 760 210" role="img" aria-label="A ladder of signals from quiet to loud: ambient colour, peripheral indicator, inline status, badge, toast, sound or vibration, modal dialog, blocking alert. The selected rung is highlighted."></svg>
+    <input type="range" min="0" max="7" value="2" id="ladder-range" aria-label="Attention level">
+    <div class="ladder-info">
+      <div class="ladder-k" id="ladder-k"></div>
+      <div class="ladder-d" id="ladder-d"></div>
+    </div>
+  </div>
+  <figcaption><b>The test.</b> Could this signal move one rung down and still get the job done? If yes, it's borrowing attention it doesn't need.</figcaption>
+</figure>
+
+<h2 id="scorecard">The scorecard</h2>
+<p>Name the screen, then answer each question. <em>Yes</em> means the screen already does this well; <em>Partly</em> means it's there but weak; <em>No</em> means it isn't. Skip anything that doesn't apply — it won't count against you.</p>
+
+<div class="crit" id="crit">
+  <div class="crit-top">
+    <label class="crit-name"><span>Screen being reviewed</span><input id="crit-screen" type="text" placeholder="e.g. NbS Tool — site overview" autocomplete="off"></label>
+    <div class="crit-actions">
+      <button class="pill" id="crit-copy">Copy summary</button>
+      <button class="pill" id="crit-reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="crit-score">
+    <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(30,33,48,.08)" stroke-width="10"/><circle id="ring-arc" cx="60" cy="60" r="50" fill="none" stroke="#5863E7" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)"/></svg><div class="ring-n"><b id="ring-val">–</b><small>calm</small></div></div>
+    <div class="bars" id="crit-bars"></div>
+  </div>
+
+  <div class="crit-groups" id="crit-groups"></div>
+
+  <div class="crit-verdict" id="crit-verdict"></div>
+</div>
+
+<h2 id="principle-map">Which principle does each question serve?</h2>
+<p>The checklist is the eight principles folded into five groups. Hover a principle to see which questions carry it — and notice that principles 1, 6 and 7 are spread across the most questions. That's not an accident; they're the ones that catch the most problems in data products.</p>
+
+<figure class="viz tint">
+  <div class="viz-title">Principle → question map</div>
+  <div class="pmap" id="pmap"></div>
+  <figcaption><b>How to read it.</b> A principle with many lines is doing a lot of work in this checklist. A question with many lines is a good one to ask first.</figcaption>
+</figure>
+
+<div class="callout note">
+  <div class="cl-k">Note to self</div>
+  <p>Run this once on the NbS Tool and once on a Webbify client site, then revise. A checklist that hasn't been used is just a wish list.</p>
+</div>
+`},
+/* ------------------------------------------------------------ */
+{
+  slug:'how-this-notebook-is-organised',
+  title:'How this notebook is organised',
+  excerpt:'Three levels of grouping — topics, collections, tags — so the page stays navigable as it grows past a handful of notes.',
+  date:'2026-10-30',
+  topic:'notes',
+  collection:'design-ops',
+  tags:['meta','content-system','information-architecture'],
+  body:`
+<p>I want this page to work when it has three notes and when it has three hundred. Most personal blogs fail at the second case because they only have one axis: time. Here's the structure I'm starting with.</p>
+
+<h2 id="levels">Three levels, coarse to fine</h2>
+<ol>
+  <li><strong>Topic</strong> — exactly one per note. The broad section: <code>design</code>, <code>research</code>, <code>product</code>, <code>craft</code>, <code>notes</code>. Topics are few and stable.</li>
+  <li><strong>Collection</strong> — optional, one per note. A learning track that can cross topics. "Calm Technology" can hold a design note, a research note and a checklist. Collections are the thing I'm <em>currently</em> working through; they come and go.</li>
+  <li><strong>Tags</strong> — many per note, free-form. Cross-cutting and cheap. They power related-note suggestions and the tag cloud.</li>
+</ol>
+
+<div class="callout key">
+  <div class="cl-k">The rule</div>
+  <p>If I'm not sure where something goes: topic is <em>what kind of thing is this</em>, collection is <em>what am I learning</em>, tag is <em>what does it touch</em>.</p>
+</div>
+
+<h2 id="why">Why not just categories?</h2>
+<p>A single category tree forces every note into one box and breaks the moment something fits two. Topic + collection + tags gives three orthogonal views of the same notes without a hierarchy I'll regret later. It also maps cleanly to frontmatter when this moves from a static HTML file into the Next.js site.</p>
+
+<h2 id="later">What's deliberately missing (for now)</h2>
+<ul>
+  <li>No comments. Conversation happens over email or in person.</li>
+  <li>No reading-time gamification, no streaks. Calm, remember?</li>
+  <li>No images until a note genuinely needs one. The covers are generated from the brand geometry.</li>
+</ul>
+`},
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtDate = d => new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const readTime = html => Math.max(1, Math.round(html.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length / 220));
+const mins = p => p.readMins || readTime(p.body);
+const postUrl = p => p.href || ('#/post/'+p.slug);
+
+// Deterministic brand-geometry cover per post (no image assets needed)
+function cover(post){
+  let h=0; for(const c of post.slug) h=(h*31+c.charCodeAt(0))>>>0;
+  const r=(n)=>{h=(h*1664525+1013904223)>>>0; return (h/4294967296)*n};
+  const palettes={design:['#5863E7','#7982EC','#BBBEF3'],research:['#8CE7E5','#A3ECEA','#D5F7F6'],
+    product:['#F2D8A5','#F3DCB0','#F7E8C9'],craft:['#25D366','#7CE5A4','#C9F3D9'],notes:['#1E2130','#5863E7','#BBBEF3']};
+  const bgs={design:'#EEF0FD',research:'#E9F9F8',product:'#FAF1E2',craft:'#EAF9F0',notes:'#F1F2F6'};
+  const p=palettes[post.topic]||palettes.design;
+  let tris='';
+  for(let i=0;i<7;i++){
+    const x=r(400), y=r(240), s=40+r(120), rot=r(360), col=p[i%3], op=(0.35+r(0.5)).toFixed(2);
+    tris+=`<polygon points="${x},${y} ${x+s},${y} ${x+s/2},${y+s*0.87}" fill="${col}" opacity="${op}" transform="rotate(${rot.toFixed(0)} ${x+s/2} ${y+s/2})"/>`;
+  }
+  return `<div class="cover" style="background:${bgs[post.topic]||bgs.design}"><svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">${tris}</svg></div>`;
+}
+
+const topicTag = t => `<span class="topic-tag ${TOPICS[t].cls}">${TOPICS[t].label}</span>`;
+const metaLine = p => `<div class="meta">${topicTag(p.topic)}<span class="sep"></span><span>${fmtDate(p.date)}</span><span class="sep"></span><span>${mins(p)} min read</span></div>`;
+
+// ---------- state ----------
+const state = { topic:null, collection:null, tag:null, q:'', sort:'new' };
+
+function filtered(){
+  let list = POSTS.filter(p =>
+    (!state.topic || p.topic===state.topic) &&
+    (!state.collection || p.collection===state.collection) &&
+    (!state.tag || p.tags.includes(state.tag)) &&
+    (!state.q || (p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body.replace(/<[^>]+>/g,' ')).toLowerCase().includes(state.q))
+  );
+  if(state.sort==='new') list.sort((a,b)=>b.date.localeCompare(a.date));
+  if(state.sort==='old') list.sort((a,b)=>a.date.localeCompare(b.date));
+  if(state.sort==='long') list.sort((a,b)=>mins(b)-mins(a));
+  return list;
+}
+
+function renderTopics(){
+  const counts={}; POSTS.forEach(p=>counts[p.topic]=(counts[p.topic]||0)+1);
+  $('#topics').innerHTML =
+    `<button class="pill ${!state.topic?'active':''}" data-topic=""><span class="dot"></span>All <span class="cnt">${POSTS.length}</span></button>` +
+    Object.entries(TOPICS).map(([k,t])=>`<button class="pill ${state.topic===k?'active':''}" data-topic="${k}"><span class="dot"></span>${t.label} <span class="cnt">${counts[k]||0}</span></button>`).join('');
+}
+
+function renderCollections(){
+  $('#colgrid').innerHTML = Object.entries(COLLECTIONS).map(([k,c])=>{
+    const n = POSTS.filter(p=>p.collection===k).length;
+    return `<button class="collection ${state.collection===k?'active':''}" data-col="${k}">
+      <div class="big-tri"></div>
+      <div class="col-kicker">${c.kicker}</div>
+      <h3>${c.title}</h3>
+      <p>${c.desc}</p>
+      <div class="col-foot"><span>${n} note${n===1?'':'s'}</span><span class="prog"><i style="width:${Math.min(100,n*20)}%"></i></span></div>
+    </button>`;
+  }).join('');
+}
+
+function renderCloud(){
+  const counts={}; POSTS.forEach(p=>p.tags.forEach(t=>counts[t]=(counts[t]||0)+1));
+  const tags=Object.keys(counts).sort();
+  $('#cloud').innerHTML = tags.map(t=>`<button class="tag ${state.tag===t?'active':''}" data-tag="${t}">#${t} <span style="opacity:.5">${counts[t]}</span></button>`).join('');
+  $('#st-posts').textContent=POSTS.length; $('#st-cols').textContent=Object.keys(COLLECTIONS).length; $('#st-tags').textContent=tags.length;
+}
+
+function postCard(p){
+  return `<article class="post" data-slug="${p.slug}">
+    <div class="post-cover">${cover(p)}</div>
+    <div class="post-body">
+      ${metaLine(p)}
+      <h3><span>${esc(p.title)}</span></h3>
+      <p class="ex">${esc(p.excerpt)}</p>
+      <div class="post-foot"><div class="tags">${p.tags.slice(0,3).map(t=>`<span class="tag">#${t}</span>`).join('')}</div><span class="read">Read →</span></div>
+    </div>
+  </article>`;
+}
+
+function renderPosts(){
+  const list=filtered();
+  const anyFilter = state.topic||state.collection||state.tag||state.q;
+  $('#clear').classList.toggle('show', !!anyFilter);
+  const parts=[];
+  if(state.topic) parts.push(`topic <b>${TOPICS[state.topic].label}</b>`);
+  if(state.collection) parts.push(`collection <b>${COLLECTIONS[state.collection].title}</b>`);
+  if(state.tag) parts.push(`tag <b>#${state.tag}</b>`);
+  if(state.q) parts.push(`search <b>"${esc(state.q)}"</b>`);
+  $('#status').innerHTML = `<b>${list.length}</b> note${list.length===1?'':'s'}` + (parts.length?' · '+parts.join(' · '):'');
+
+  // Featured = only when unfiltered & sorted newest
+  const feat = (!anyFilter && state.sort==='new') ? (list.find(p=>p.featured)||null) : null;
+  $('#featured').innerHTML = feat ? `<article class="featured" data-slug="${feat.slug}">
+      <div class="feat-body">
+        ${metaLine(feat)}
+        <h2>${esc(feat.title)}</h2>
+        <p class="ex">${esc(feat.excerpt)}</p>
+        <div style="margin-top:26px"><span class="btn btn-primary" style="padding:12px 24px;font-size:14px">Read the note <span class="arr">→</span></span></div>
+      </div>
+      <div class="feat-visual"><span class="feat-badge">Featured</span>${cover(feat)}</div>
+    </article>` : '';
+  const rest = feat ? list.filter(p=>p!==feat) : list;
+  $('#grid').innerHTML = rest.length ? rest.map(postCard).join('')
+    : `<div class="empty"><h3>Nothing here yet.</h3><p>Try another topic or clear the filters — or come back once I've learned something.</p></div>`;
+  $$('.rv', $('#posts')).forEach(e=>e.classList.add('is-in'));
+}
+
+function renderHome(){ renderTopics(); renderCollections(); renderCloud(); renderPosts(); }
+
+// ---------- article ----------
+function renderArticle(slug){
+  const i = POSTS.findIndex(p=>p.slug===slug);
+  if(i<0){ location.hash='#/'; return; }
+  if(POSTS[i].href){ location.replace(POSTS[i].href); return; }
+  const p = POSTS[i];
+  const sorted=[...POSTS].sort((a,b)=>b.date.localeCompare(a.date));
+  const si=sorted.indexOf(p); const prev=sorted[si+1], next=sorted[si-1];
+
+  // TOC from body headings
+  const tmp=document.createElement('div'); tmp.innerHTML=p.body;
+  const heads=$$('h2,h3',tmp);
+  heads.forEach((h,k)=>{ if(!h.id) h.id='s'+k; });
+  const toc = heads.map(h=>`<li><a href="#${h.id}" class="${h.tagName==='H3'?'h3':''}" data-toc>${esc(h.textContent)}</a></li>`).join('');
+
+  const related = POSTS.filter(o=>o!==p && (o.collection===p.collection || o.tags.some(t=>p.tags.includes(t)))).slice(0,3);
+
+  $('#artwrap').innerHTML = `
+    <a href="#/" class="art-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> All notes</a>
+    <header class="art-head">
+      <div class="meta">${topicTag(p.topic)}${p.collection?`<span class="sep"></span><a href="#/?collection=${p.collection}" style="color:var(--indigo);font-weight:600">${COLLECTIONS[p.collection].title}</a>`:''}</div>
+      <h1>${esc(p.title)}</h1>
+      <p class="lede">${esc(p.excerpt)}</p>
+      <div class="art-byline">
+        <div class="ava"><img src="${AUTHOR.ava}" alt="" onerror="this.remove()">A</div>
+        <div><div class="who">${AUTHOR.name}</div><div class="when">${fmtDate(p.date)} · ${mins(p)} min read</div></div>
+      </div>
+    </header>
+    <div class="art-layout">
+      <div>
+        <div class="art-body">${tmp.innerHTML}</div>
+        <div class="art-nav">
+          <a href="${prev?'#/post/'+prev.slug:'#'}" class="prev ${prev?'':'disabled'}"><div class="k">← Older</div><div class="t">${prev?esc(prev.title):'—'}</div></a>
+          <a href="${next?'#/post/'+next.slug:'#'}" class="next ${next?'':'disabled'}"><div class="k">Newer →</div><div class="t">${next?esc(next.title):'—'}</div></a>
+        </div>
+      </div>
+      <aside class="art-side">
+        ${toc?`<div class="side-box toc-box"><h4>On this page</h4><ul class="toc">${toc}</ul></div>`:''}
+        <div class="side-box"><h4>Tags</h4><div class="side-tags">${p.tags.map(t=>`<a class="tag" href="#/?tag=${t}">#${t}</a>`).join('')}</div></div>
+        ${p.sources&&p.sources.length?`<div class="side-box side-src"><h4>Sources</h4>${p.sources.map(s=>`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.t)} ↗</a>`).join('')}</div>`:''}
+      </aside>
+    </div>
+    ${related.length?`<div class="related"><div class="eyebrow">Related notes</div><h2 class="h-lg" style="font-size:28px">Keep reading.</h2><div class="post-grid">${related.map(postCard).join('')}</div></div>`:''}
+  `;
+  document.title = p.title+' — Webbify Insights';
+  window.scrollTo({top:0,behavior:'instant'});
+  if(p.init && typeof window[p.init]==='function') window[p.init]();
+  // TOC highlight
+  const links=$$('[data-toc]'); const hs=$$('.art-body h2,.art-body h3');
+  if(hs.length){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{ if(e.isIntersecting){ links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+e.target.id)); } })},{rootMargin:'-20% 0px -70% 0px'});
+    hs.forEach(h=>io.observe(h));
+  }
+  // in-article anchor links shouldn't trigger routing
+  $$('[data-toc]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault(); const t=document.getElementById(a.getAttribute('href').slice(1)); if(t) t.scrollIntoView({behavior:'smooth',block:'start'});}));
+}
+
+// ---------- routing (#/ , #/post/slug , #/?topic=..&collection=..&tag=..) ----------
+function route(){
+  const h = location.hash || '#/';
+  const m = h.match(/^#\/post\/([\w-]+)/);
+  if(m){
+    document.body.classList.add('reading'); $('#article').classList.add('show');
+    renderArticle(m[1]);
+  } else {
+    document.body.classList.remove('reading'); $('#article').classList.remove('show');
+    const qs = new URLSearchParams(h.split('?')[1]||'');
+    state.topic = qs.get('topic')||null; state.collection = qs.get('collection')||null; state.tag = qs.get('tag')||null;
+    document.title='Insights — Webbify';
+    renderHome();
+    if(qs.get('collection')||qs.get('tag')||qs.get('topic')) $('#posts').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function pushFilters(){
+  const qs=new URLSearchParams();
+  if(state.topic) qs.set('topic',state.topic); if(state.collection) qs.set('collection',state.collection); if(state.tag) qs.set('tag',state.tag);
+  const s=qs.toString(); history.replaceState(null,'', s?'#/?'+s:'#/');
+  renderHome();
+}
+window.addEventListener('hashchange', route);
+
+// ---------- events (delegated) ----------
+document.addEventListener('click', e=>{
+  const t=e.target.closest('[data-topic],[data-col],[data-tag],[data-slug],#clear');
+  if(!t) return;
+  if(t.id==='clear'){ state.topic=state.collection=state.tag=null; state.q=''; $('#q').value=''; pushFilters(); return; }
+  if(t.dataset.topic!==undefined){ state.topic=t.dataset.topic||null; pushFilters(); return; }
+  if(t.dataset.col!==undefined){ state.collection = state.collection===t.dataset.col?null:t.dataset.col; pushFilters(); $('#posts').scrollIntoView({behavior:'smooth'}); return; }
+  if(t.dataset.tag!==undefined && !t.closest('.art-side')){ e.preventDefault(); state.tag = state.tag===t.dataset.tag?null:t.dataset.tag; pushFilters(); $('#posts').scrollIntoView({behavior:'smooth'}); return; }
+  if(t.dataset.slug){ const p=POSTS.find(x=>x.slug===t.dataset.slug); if(p&&p.href) location.href=p.href; else location.hash='#/post/'+t.dataset.slug; }
+});
+$('#q').addEventListener('input', e=>{ state.q=e.target.value.trim().toLowerCase(); renderPosts(); });
+$('#sort').addEventListener('change', e=>{ state.sort=e.target.value; renderPosts(); });
+
+// ---------- nav / menu / scroll ----------
+const nav=$('#nav'), burger=$('#burger'), menu=$('#menu');
+const onScroll=()=>{
+  nav.classList.toggle('scrolled', scrollY>10);
+  const d=document.documentElement; const max=d.scrollHeight-innerHeight;
+  $('#progress').style.width = (document.body.classList.contains('reading') && max>0) ? (scrollY/max*100)+'%' : '0';
+};
+addEventListener('scroll', onScroll, {passive:true}); onScroll();
+burger.addEventListener('click',()=>{const o=!menu.classList.contains('open'); menu.classList.toggle('open',o); burger.classList.toggle('open',o); burger.setAttribute('aria-expanded',o); menu.setAttribute('aria-hidden',!o); document.body.style.overflow=o?'hidden':'';});
+$$('#menu a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');burger.classList.remove('open');document.body.style.overflow='';}));
+
+// reveal
+const rio=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); rio.unobserve(e.target);} }),{threshold:.15});
+$$('.rv').forEach(el=>rio.observe(el));
+
+/* ============================================================
+   INTERACTIVE: Calm Tech crit scorecard (post: calm-tech-crit-checklist)
+   ============================================================ */
+const CRIT_GROUPS = [
+  {id:'glance', label:'Attention cost', color:'#5863E7', p:[1,2], qs:[
+    {t:'A user can learn the single most important thing from this screen in about 2 seconds.', p:[1]},
+    {t:'There is a designed "nothing needs your attention" state — not a blank panel.', p:[2]},
+    {t:'Every interrupt (modal, toast, badge) has been checked: none could be a quieter signal.', p:[1,2]},
+  ]},
+  {id:'periphery', label:'Periphery', color:'#1a7a78', p:[3], qs:[
+    {t:'Elements are deliberately placed at the center or the edge; nothing ambient sits at the center.', p:[3]},
+    {t:'When something becomes urgent it moves from edge to center — and back again afterwards.', p:[3,2]},
+    {t:'The screen still gives value when left open in the background.', p:[3,1]},
+  ]},
+  {id:'signals', label:'Signals', color:'#8a6410', p:[5], qs:[
+    {t:'A consistent visual vocabulary (colour, shape, position) carries meaning without words.', p:[5]},
+    {t:'A non-native speaker would still understand the status at a glance.', p:[5,8]},
+    {t:'Motion confirms an action rather than decorating it.', p:[5,1]},
+  ]},
+  {id:'failure', label:'Failure & durability', color:'#e2574c', p:[6], qs:[
+    {t:'Offline, slow-network, stale-data and missing-data states are designed, not accidental.', p:[6]},
+    {t:'Every number carries an "as of" time the user can trust.', p:[6,2]},
+    {t:'The user can take the value with them (export, print, static link) if the tool goes away.', p:[6,7]},
+  ]},
+  {id:'minimum', label:'Minimum tech & norms', color:'#128a43', p:[7,8,4], qs:[
+    {t:'The problem fits in one sentence, and this is close to the least sophisticated thing that solves it.', p:[7]},
+    {t:'No feature exists only because it was possible rather than needed.', p:[7]},
+    {t:'The design respects where it will actually be used — alone, projected, on a phone in the field.', p:[8]},
+    {t:'It is visible who makes the human judgment, and the machine remembers so the human doesn\'t have to.', p:[4]},
+  ]},
+];
+const PRINCIPLES = ['Smallest amount of attention','Inform and create calm','Make use of the periphery','Amplify tech + humanity','Communicate without speaking','Still work when it fails','Minimum tech for the problem','Respect social norms'];
+const LADDER = [
+  {k:'Ambient colour / tint', d:'A surface quietly changes hue. <b>Cost:</b> none — noticed only if you look. Use for "all is normal".'},
+  {k:'Peripheral indicator', d:'A small dot, sparkline or border at the edge. <b>Cost:</b> a glance. Use for slow-changing state.'},
+  {k:'Inline status text', d:'A label where the data lives ("as of 09:12"). <b>Cost:</b> a short read. Use for context the user may want.'},
+  {k:'Badge / count', d:'A number on an icon. <b>Cost:</b> a nag that persists until cleared. Use only when a count is itself the information.'},
+  {k:'Toast / banner', d:'Appears, then leaves. <b>Cost:</b> a context switch of a few seconds. Use for something the user did, confirmed.'},
+  {k:'Sound / vibration', d:'Reaches the user even when not looking. <b>Cost:</b> an interruption of whatever they were doing. Use when timing matters.'},
+  {k:'Modal dialog', d:'Blocks the current task until answered. <b>Cost:</b> full attention, forced decision. Use for irreversible actions only.'},
+  {k:'Blocking alert', d:'Takes over the screen or device. <b>Cost:</b> everything. Use for safety and nothing else.'},
+];
+
+function initCalmCrit(){
+  /* ---- attention ladder ---- */
+  const lad=$('#ladder'); if(!lad) return;
+  const svg=$('svg',lad), range=$('#ladder-range');
+  function drawLadder(v){
+    const n=LADDER.length, w=760, bw=72, gap=(w-40-bw*n)/(n-1);
+    let out=`<line x1="20" y1="178" x2="740" y2="178" stroke="rgba(30,33,48,.1)"/>`;
+    LADDER.forEach((r,i)=>{
+      const x=20+i*(bw+gap), h=30+i*17, y=178-h, on=i===v, past=i<v;
+      const fill = on? '#5863E7' : (past? '#BBBEF3' : '#EDEEF3');
+      out+=`<g class="rung" style="opacity:${on?1:(past?.9:.6)}"><rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="10" fill="${fill}"/>`+
+        (on?`<polygon points="${x+bw/2-9},${y-18} ${x+bw/2+9},${y-18} ${x+bw/2},${y-4}" fill="#5863E7"/>`:'')+
+        `<text x="${x+bw/2}" y="${196}" font-size="9.5" font-weight="600" fill="${on?'#1E2130':'#9aa0ad'}" text-anchor="middle">${r.k.split(' /')[0].split(' ')[0]}</text></g>`;
+    });
+    out+=`<text x="20" y="18" font-size="10" fill="#9aa0ad" class="svg-body">quiet · cheap</text><text x="740" y="18" font-size="10" fill="#9aa0ad" text-anchor="end" class="svg-body">loud · expensive</text>`;
+    svg.innerHTML=out;
+    $('#ladder-k').innerHTML=`<i></i>Rung ${v+1} of ${n} — ${LADDER[v].k}`;
+    $('#ladder-d').innerHTML=LADDER[v].d;
+  }
+  range.addEventListener('input',e=>drawLadder(+e.target.value)); drawLadder(+range.value);
+
+  /* ---- scorecard ---- */
+  const KEY='webbify-calmcrit';
+  let store={}; try{ store=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  const screenIn=$('#crit-screen');
+  const slug=()=> (screenIn.value.trim()||'untitled').toLowerCase();
+  const answers=()=>{ const k=slug(); store[k]=store[k]||{}; return store[k]; };
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){} };
+
+  $('#crit-groups').innerHTML = CRIT_GROUPS.map(g=>`<div class="crit-group" id="cg-${g.id}">
+    <div class="cg-head"><h3><i style="background:${g.color}"></i>${g.label}</h3><span class="cg-p">principles ${g.p.join(', ')}</span></div>
+    ${g.qs.map((q,i)=>`<div class="q" data-q="${g.id}.${i}">
+      <div class="q-t">${q.t}<span class="qp">${q.p.map(n=>`<b title="${PRINCIPLES[n-1]}">${n}</b>`).join('')}</span></div>
+      <div class="seg"><button data-v="2">Yes</button><button data-v="1">Partly</button><button data-v="0">No</button><button data-v="x">Skip</button></div>
+    </div>`).join('')}
+  </div>`).join('');
+  $('#crit-bars').innerHTML = CRIT_GROUPS.map(g=>`<div class="bar" data-g="${g.id}"><div class="bl"><i style="background:${g.color}"></i>${g.label}</div><div class="bt"><i style="background:${g.color}"></i></div><div class="bv na">–</div></div>`).join('');
+
+  function paint(){
+    const a=answers();
+    $$('.q').forEach(q=>{ const v=a[q.dataset.q]; q.className='q'+(v!==undefined?' v'+v:''); $$('button',q).forEach(b=>b.classList.toggle('on',b.dataset.v===String(v))); });
+    let tot=0, max=0; const weak=[];
+    CRIT_GROUPS.forEach(g=>{
+      let s=0,m=0; g.qs.forEach((q,i)=>{ const v=a[g.id+'.'+i]; if(v===undefined||v==='x') return; s+=+v; m+=2; if(+v===0) weak.push(q.t); });
+      tot+=s; max+=m;
+      const bar=$(`.bar[data-g="${g.id}"]`), bv=$('.bv',bar), bi=$('.bt i',bar);
+      if(m===0){ bi.style.width='0'; bv.textContent='–'; bv.classList.add('na'); }
+      else { const pct=Math.round(s/m*100); bi.style.width=pct+'%'; bv.textContent=pct+'%'; bv.classList.remove('na'); }
+    });
+    const arc=$('#ring-arc'), val=$('#ring-val');
+    if(max===0){ arc.style.strokeDashoffset=314; val.textContent='–'; }
+    else { const pct=Math.round(tot/max*100); arc.style.strokeDashoffset=314-314*pct/100; arc.style.stroke= pct>=75?'#128a43':(pct>=45?'#5863E7':'#e2574c'); val.textContent=pct; }
+    const vd=$('#crit-verdict');
+    if(max===0){ vd.className='crit-verdict empty'; vd.innerHTML='Answer a few questions and a verdict will appear here.'; }
+    else{
+      const pct=Math.round(tot/max*100);
+      const head = pct>=75?'Calm. This screen mostly gets out of the way.' : pct>=45?'Getting there. A few signals are borrowing attention they don\'t need.' : 'Loud. This screen is asking for more attention than the task deserves.';
+      vd.className='crit-verdict';
+      vd.innerHTML=`<b>${head}</b>`+(weak.length?`<div style="margin-top:6px">Start with the "No" answers:</div><ul>${weak.slice(0,4).map(w=>`<li>${w}</li>`).join('')}</ul>`:'');
+    }
+  }
+  $('#crit').addEventListener('click',e=>{
+    const b=e.target.closest('.seg button'); if(!b) return;
+    const q=b.closest('.q').dataset.q, a=answers();
+    if(a[q]===b.dataset.v) delete a[q]; else a[q]=b.dataset.v;
+    save(); paint();
+  });
+  screenIn.addEventListener('input',paint);
+  $('#crit-reset').addEventListener('click',()=>{ delete store[slug()]; save(); paint(); });
+  $('#crit-copy').addEventListener('click',()=>{
+    const a=answers(); const name=screenIn.value.trim()||'Untitled screen';
+    const lines=[`Calm Tech crit — ${name}`, `Score: ${$('#ring-val').textContent}/100`, ''];
+    CRIT_GROUPS.forEach(g=>{ lines.push(g.label.toUpperCase()); g.qs.forEach((q,i)=>{ const v=a[g.id+'.'+i]; const m=v==='2'?'✓':v==='1'?'~':v==='0'?'✗':'·'; lines.push(`  ${m} ${q.t}`); }); lines.push(''); });
+    navigator.clipboard?.writeText(lines.join('\n')).then(()=>{ const b=$('#crit-copy'); b.textContent='Copied ✓'; setTimeout(()=>b.textContent='Copy summary',1400); });
+  });
+  // restore last screen name
+  const last=Object.keys(store).find(k=>k!=='untitled'); if(last && !screenIn.value) screenIn.value=last;
+  paint();
+
+  /* ---- principle → question map ---- */
+  const pm=$('#pmap'); const qs=CRIT_GROUPS.flatMap(g=>g.qs.map(q=>({...q,g})));
+  const H=qs.length*26+20, L=250, R=520;
+  let out=`<svg viewBox="0 0 760 ${H}" role="img" aria-label="Eight Calm Tech principles on the left connected by lines to the checklist questions they inform on the right.">`;
+  const py=i=>20+i*((H-40)/7), qy=i=>14+i*26;
+  qs.forEach((q,qi)=>q.p.forEach(pn=>{ out+=`<path class="ln" data-p="${pn}" data-q="${qi}" d="M${L} ${py(pn-1)} C ${L+120} ${py(pn-1)}, ${R-120} ${qy(qi)}, ${R-14} ${qy(qi)}" fill="none"/>`; }));
+  PRINCIPLES.forEach((p,i)=>{ out+=`<g class="pn" data-p="${i+1}"><rect x="10" y="${py(i)-13}" width="${L-10}" height="26" rx="13" fill="#fff" stroke="#BBBEF3"/><text x="24" y="${py(i)+4}" font-size="11" font-weight="700" fill="#1E2130"><tspan class="pnum" fill="#5863E7">${i+1}</tspan>  ${p}</text></g>`; });
+  qs.forEach((q,i)=>{ const t=q.t.length>42?q.t.slice(0,42).replace(/\s\S*$/,'')+'…':q.t; out+=`<g class="qn" data-q="${i}"><circle class="qdot" cx="${R-8}" cy="${qy(i)}" r="4"/><text x="${R+4}" y="${qy(i)+4}" font-size="10.5" fill="#3d4152" class="svg-body">${t}</text></g>`; });
+  out+='</svg>'; pm.innerHTML=out;
+  const focusP=(pn)=>{ pm.classList.toggle('focus',pn!=null); $$('.pn',pm).forEach(n=>n.classList.toggle('on',n.dataset.p===String(pn))); const qset=new Set(); $$('.ln',pm).forEach(l=>{ const on=l.dataset.p===String(pn); l.classList.toggle('on',on); if(on) qset.add(l.dataset.q); }); $$('.qn',pm).forEach(n=>n.classList.toggle('on',qset.has(n.dataset.q))); };
+  $$('.pn',pm).forEach(n=>{ n.addEventListener('mouseenter',()=>focusP(n.dataset.p)); n.addEventListener('mouseleave',()=>focusP(null)); n.addEventListener('click',()=>focusP(n.classList.contains('on')?null:n.dataset.p)); });
+}
+window.initCalmCrit = initCalmCrit;
+
+route();
+</script>
+</body>
+</html>
