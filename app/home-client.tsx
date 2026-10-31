@@ -83,7 +83,8 @@ const MENU_LINKS = [
   { href: '#how', num: '01', label: 'How it works', hover: 'how' },
   { href: '#work', num: '02', label: 'Work', hover: 'work' },
   { href: '#pricing', num: '03', label: 'Pricing', hover: 'pricing' },
-  { href: '#founders', num: '04', label: 'Founders', hover: 'founders' }
+  { href: '#founders', num: '04', label: 'Founders', hover: 'founders' },
+  { href: '/insights', num: '05', label: 'Insights', hover: 'insights' }
 ];
 
 function BrandMark() {
@@ -434,6 +435,7 @@ export default function HomeClient() {
             <a href="#work" data-scroll>Work</a>
             <a href="#pricing" data-scroll>Pricing</a>
             <a href="#founders" data-scroll>Founders</a>
+            <a href="/insights">Insights</a>
             <a className="btn btn-primary nav-cta" href={`${WA}?text=Hi%20Webbify%20%E2%80%94%20I%27d%20like%20to%20talk%20about%20a%20website.`} target="_blank" rel="noopener">Chat on WhatsApp</a>
           </div>
           <button className="burger" id="burger" aria-label="Open menu" aria-expanded="false">
@@ -448,6 +450,7 @@ export default function HomeClient() {
         <div className="menu-tint tint-turq" data-tint="work"></div>
         <div className="menu-tint tint-sand" data-tint="pricing"></div>
         <div className="menu-tint tint-wa" data-tint="founders"></div>
+        <div className="menu-tint tint-indigo" data-tint="insights"></div>
         <div className="menu-links">
           {MENU_LINKS.map((l) => (
             <a key={l.hover} href={l.href} data-scroll data-hover={l.hover}>
@@ -691,6 +694,7 @@ export default function HomeClient() {
                 <li><a href="#work" data-scroll>Work</a></li>
                 <li><a href="#pricing" data-scroll>Pricing</a></li>
                 <li><a href="#founders" data-scroll>Founders</a></li>
+                <li><a href="/insights">Insights</a></li>
               </ul>
             </div>
             <div className="foot-col">
